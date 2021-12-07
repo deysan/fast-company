@@ -7,7 +7,11 @@ const Users = () => {
   console.log(api.users.fetchAll());
 
   const renderQualitie = (qualities) => {
-    return qualities.map((qualitie) => qualitie.name);
+    return qualities.map((qualitie) => (
+      <span key={qualitie._id} className={`badge me-1 bg-${qualitie.color}`}>
+        {qualitie.name}
+      </span>
+    ));
   };
 
   const renderUser = () => {
@@ -17,7 +21,7 @@ const Users = () => {
         <td>{renderQualitie(user.qualities)}</td>
         <td>{user.profession.name}</td>
         <td>{user.completedMeetings}</td>
-        <td>{user.rate} из 5</td>
+        <td>{user.rate} / 5</td>
         <td>Кнопка удалить</td>
       </tr>
     ));
