@@ -4,11 +4,7 @@ import api from '../api';
 const Users = () => {
   const [users, setUsers] = useState(api.users.fetchAll());
 
-  console.log(api.users.fetchAll());
-
-  const handleDelete = (userId) => {
-    setUsers((prevState) => prevState.filter((user) => user._id !== userId));
-  };
+  const MAX_RATING = 5;
 
   const renderPhrase = (number) => {
     const titles = ['человек тусанет', 'человека тусанут'];
@@ -39,35 +35,6 @@ const Users = () => {
     return <span className={classes}>{phrase}</span>;
   };
 
-  const renderQualitie = (qualities) => {
-    return qualities.map((qualitie) => (
-      <span key={qualitie._id} className={`badge me-1 bg-${qualitie.color}`}>
-        {qualitie.name}
-      </span>
-    ));
-  };
-
-  const renderUser = () => {
-    return users.map((user) => (
-      <tr key={user._id}>
-        <td>{user.name}</td>
-        <td>{renderQualitie(user.qualities)}</td>
-        <td>{user.profession.name}</td>
-        <td>{user.completedMeetings}</td>
-        <td>{user.rate} / 5</td>
-        <td>
-          <button
-            className="btn btn-danger"
-            type="submit"
-            onClick={() => handleDelete(user._id)}
-          >
-            Удалить
-          </button>
-        </td>
-      </tr>
-    ));
-  };
-
   const renderTable = () => {
     return (
       users.length !== 0 && (
@@ -86,6 +53,41 @@ const Users = () => {
         </table>
       )
     );
+  };
+
+  const renderUser = () => {
+    return users.map((user) => (
+      <tr key={user._id}>
+        <td>{user.name}</td>
+        <td>{renderQualitie(user.qualities)}</td>
+        <td>{user.profession.name}</td>
+        <td>{user.completedMeetings}</td>
+        <td>
+          {user.rate} / {MAX_RATING}
+        </td>
+        <td>
+          <button
+            className="btn btn-danger"
+            type="submit"
+            onClick={() => handleDelete(user._id)}
+          >
+            Удалить
+          </button>
+        </td>
+      </tr>
+    ));
+  };
+
+  const renderQualitie = (qualities) => {
+    return qualities.map((qualitie) => (
+      <span key={qualitie._id} className={`badge me-1 bg-${qualitie.color}`}>
+        {qualitie.name}
+      </span>
+    ));
+  };
+
+  const handleDelete = (userId) => {
+    setUsers((prevState) => prevState.filter((user) => user._id !== userId));
   };
 
   return (
