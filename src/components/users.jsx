@@ -6,6 +6,10 @@ const Users = () => {
 
   console.log(api.users.fetchAll());
 
+  const handleDelete = (userId) => {
+    setUsers((prevState) => prevState.filter((user) => user._id !== userId));
+  };
+
   const renderQualitie = (qualities) => {
     return qualities.map((qualitie) => (
       <span key={qualitie._id} className={`badge me-1 bg-${qualitie.color}`}>
@@ -22,7 +26,15 @@ const Users = () => {
         <td>{user.profession.name}</td>
         <td>{user.completedMeetings}</td>
         <td>{user.rate} / 5</td>
-        <td>Кнопка удалить</td>
+        <td>
+          <button
+            className="btn btn-danger"
+            type="submit"
+            onClick={() => handleDelete(user._id)}
+          >
+            Удалить
+          </button>
+        </td>
       </tr>
     ));
   };
