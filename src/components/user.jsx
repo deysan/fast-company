@@ -1,4 +1,5 @@
 import React from 'react';
+import Bookmark from './bookmark';
 import Qualities from './qualities';
 
 const User = (user) => {
@@ -14,6 +15,13 @@ const User = (user) => {
       <td>{user.completedMeetings}</td>
       <td>
         {user.rate} / {MAX_RATING}
+      </td>
+      <td>
+        <Bookmark
+          id={user._id}
+          isBookmark={user.isBookmark}
+          onBookmark={user.onBookmark}
+        />
       </td>
       <td>
         <button
