@@ -4,7 +4,6 @@ import Qualities from './qualities';
 import PropTypes from 'prop-types';
 
 const User = (user) => {
-  console.log(user);
   const MAX_RATING = 5;
 
   return (
