@@ -1,39 +1,10 @@
 import React, { useState } from 'react';
+import User from './user';
 import api from '../api';
+import Status from './status';
 
 const Users = () => {
   const [users, setUsers] = useState(api.users.fetchAll());
-
-  const MAX_RATING = 5;
-
-  const renderPhrase = (number) => {
-    const titles = ['человек тусанет', 'человека тусанут'];
-
-    const declOfNum = (number) => {
-      return titles[
-        number % 10 === 1 && number % 100 !== 11
-          ? 0
-          : number % 10 >= 2 &&
-            number % 10 <= 4 &&
-            (number % 100 < 10 || number % 100 >= 20)
-          ? 1
-          : 0
-      ];
-    };
-
-    let phrase = '';
-    let classes = 'badge rounded-pill m-2 py-2 px-3 fs-6 bg-';
-
-    if (number > 0) {
-      classes += 'primary';
-      phrase = `${number} ${declOfNum(number)} с тобой сегодня`;
-    } else {
-      classes += 'danger';
-      phrase = 'Никто с тобой не тусанет :(';
-    }
-
-    return <span className={classes}>{phrase}</span>;
-  };
 
   const renderTable = () => {
     return (
@@ -46,53 +17,52 @@ const Users = () => {
               <th scope="col">Профессия</th>
               <th scope="col">Встретился, раз</th>
               <th scope="col">Оценка</th>
+              <th scope="col">Избранное</th>
               <th scope="col"></th>
             </tr>
           </thead>
-          <tbody>{renderUser()}</tbody>
+          <tbody>
+            {users.map(
+              (user) => (
+                // eslint-disable-next-line no-sequences
+                !user.isBookmark ? (user.isBookmark = false) : user.isBookmark,
+                (
+                  <User
+                    key={user._id}
+                    {...user}
+                    onDelete={handleDelete}
+                    onBookmark={handleBookmark}
+                  />
+                )
+              )
+            )}
+          </tbody>
         </table>
       )
     );
-  };
-
-  const renderUser = () => {
-    return users.map((user) => (
-      <tr key={user._id}>
-        <td>{user.name}</td>
-        <td>{renderQualitie(user.qualities)}</td>
-        <td>{user.profession.name}</td>
-        <td>{user.completedMeetings}</td>
-        <td>
-          {user.rate} / {MAX_RATING}
-        </td>
-        <td>
-          <button
-            className="btn btn-danger"
-            type="submit"
-            onClick={() => handleDelete(user._id)}
-          >
-            Удалить
-          </button>
-        </td>
-      </tr>
-    ));
-  };
-
-  const renderQualitie = (qualities) => {
-    return qualities.map((qualitie) => (
-      <span key={qualitie._id} className={`badge me-1 bg-${qualitie.color}`}>
-        {qualitie.name}
-      </span>
-    ));
   };
 
   const handleDelete = (userId) => {
     setUsers((prevState) => prevState.filter((user) => user._id !== userId));
   };
 
+  const handleBookmark = (userId) => {
+    const bookmarkUsers = [...users];
+
+    bookmarkUsers.map((user) =>
+      user._id === userId
+        ? user.isBookmark === true
+          ? (user.isBookmark = false)
+          : (user.isBookmark = true)
+        : user.isBookmark
+    );
+
+    setUsers(bookmarkUsers);
+  };
+
   return (
     <>
-      {renderPhrase(users.length)}
+      <Status number={users.length} />
       {renderTable()}
     </>
   );
