@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const Status = (length) => {
   const { number } = length;
@@ -11,9 +12,7 @@ const Status = (length) => {
         ? 0
         : number % 10 >= 2 &&
           number % 10 <= 4 &&
-          (number % 100 < 10 || number % 100 >= 20)
-        ? 1
-        : 0
+          (number % 100 < 10 || number % 100 >= 20 ? 1 : 0)
     ];
   };
 
@@ -29,6 +28,10 @@ const Status = (length) => {
   }
 
   return <span className={classes}>{phrase}</span>;
+};
+
+Status.propTypes = {
+  number: PropTypes.number.isRequired
 };
 
 export default Status;

@@ -1,8 +1,10 @@
 import React from 'react';
 import Bookmark from './bookmark';
 import Qualities from './qualities';
+import PropTypes from 'prop-types';
 
 const User = (user) => {
+  console.log(user);
   const MAX_RATING = 5;
 
   return (
@@ -34,6 +36,10 @@ const User = (user) => {
       </td>
     </tr>
   );
+};
+
+User.propTypes = {
+  user: PropTypes.object
 };
 
 export default User;

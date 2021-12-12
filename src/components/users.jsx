@@ -3,7 +3,7 @@ import User from './user';
 import api from '../api';
 import Status from './status';
 import Pagination from './pagination';
-import { paginate } from '../utils/paginate';
+import paginate from '../utils/paginate';
 
 const Users = () => {
   const [users, setUsers] = useState(api.users.fetchAll());
