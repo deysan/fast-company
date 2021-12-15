@@ -8,12 +8,16 @@ import Filter from './filter';
 
 const Users = () => {
   const [users, setUsers] = useState(api.users.fetchAll());
-  const [professions, setProfessions] = useState();
   const [currentPage, setCurrentPage] = useState(1);
+  const [professions, setProfessions] = useState();
+  const [selectedFilter, setSelectedFilter] = useState();
 
-  const count = users.length;
   const pageSize = 4;
-  const userCrop = paginate(users, currentPage, pageSize);
+  const filteredUsers = selectedFilter
+    ? users.filter((user) => user.profession === selectedFilter)
+    : users;
+  const userCrop = paginate(filteredUsers, currentPage, pageSize);
+  const count = filteredUsers.length;
 
   const renderTable = () => {
     return (
@@ -73,9 +77,12 @@ const Users = () => {
     setCurrentPage(pageIndex);
   };
 
-  const handleProfessionSelect = (params) => {
-    setProfessions(params);
-    console.log(params);
+  const handleProfessionSelect = (item) => {
+    setSelectedFilter(item);
+  };
+
+  const clearFilter = () => {
+    setSelectedFilter();
   };
 
   useEffect(() => {
@@ -86,9 +93,17 @@ const Users = () => {
     <>
       <Status number={count} />
       {professions && (
-        <Filter items={professions} onItemSelect={handleProfessionSelect} />
+        <>
+          <Filter
+            items={professions}
+            selectedItem={selectedFilter}
+            onItemSelect={handleProfessionSelect}
+          />
+          <button className="btn btn-secondary mt-2" onClick={clearFilter}>
+            Сброс
+          </button>
+        </>
       )}
-
       {renderTable()}
       <Pagination
         itemsCount={count}
