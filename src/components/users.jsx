@@ -4,17 +4,15 @@ import api from '../api';
 import Status from './status';
 import Pagination from './pagination';
 import paginate from '../utils/paginate';
+import Filter from './filter';
 
 const Users = () => {
   const [users, setUsers] = useState(api.users.fetchAll());
+  const [professions] = useState(api.professions.fetchAll());
   const [currentPage, setCurrentPage] = useState(1);
 
   const count = users.length;
   const pageSize = 4;
-  const handlePageChange = (pageIndex) => {
-    setCurrentPage(pageIndex);
-  };
-
   const userCrop = paginate(users, currentPage, pageSize);
 
   const renderTable = () => {
@@ -71,9 +69,21 @@ const Users = () => {
     setUsers(bookmarkUsers);
   };
 
+  const handlePageChange = (pageIndex) => {
+    setCurrentPage(pageIndex);
+  };
+
+  const handleProfessionSelect = (params) => {
+    // setProfessions(params);
+    console.log(params);
+  };
+
+  console.log(professions);
+
   return (
     <>
       <Status number={count} />
+      <Filter items={professions} onItemSelect={handleProfessionSelect} />
       {renderTable()}
       <Pagination
         itemsCount={count}
