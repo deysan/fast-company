@@ -2,13 +2,24 @@ import React, { useState } from 'react';
 import User from './user';
 import api from '../api';
 import Status from './status';
+import Pagination from './pagination';
+import paginate from '../utils/paginate';
 
 const Users = () => {
   const [users, setUsers] = useState(api.users.fetchAll());
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const count = users.length;
+  const pageSize = 4;
+  const handlePageChange = (pageIndex) => {
+    setCurrentPage(pageIndex);
+  };
+
+  const userCrop = paginate(users, currentPage, pageSize);
 
   const renderTable = () => {
     return (
-      users.length !== 0 && (
+      count !== 0 && (
         <table className="table">
           <thead>
             <tr>
@@ -22,7 +33,7 @@ const Users = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map(
+            {userCrop.map(
               (user) => (
                 // eslint-disable-next-line no-sequences
                 !user.isBookmark ? (user.isBookmark = false) : user.isBookmark,
@@ -62,8 +73,14 @@ const Users = () => {
 
   return (
     <>
-      <Status number={users.length} />
+      <Status number={count} />
       {renderTable()}
+      <Pagination
+        itemsCount={count}
+        pageSize={pageSize}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+      />
     </>
   );
 };
