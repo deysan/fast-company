@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import User from './user';
 import api from '../api';
 import Status from './status';
@@ -8,7 +8,7 @@ import Filter from './filter';
 
 const Users = () => {
   const [users, setUsers] = useState(api.users.fetchAll());
-  const [professions] = useState(api.professions.fetchAll());
+  const [professions, setProfessions] = useState();
   const [currentPage, setCurrentPage] = useState(1);
 
   const count = users.length;
@@ -74,16 +74,21 @@ const Users = () => {
   };
 
   const handleProfessionSelect = (params) => {
-    // setProfessions(params);
+    setProfessions(params);
     console.log(params);
   };
 
-  console.log(professions);
+  useEffect(() => {
+    api.professions.fetchAll().then((data) => setProfessions(data));
+  }, []);
 
   return (
     <>
       <Status number={count} />
-      <Filter items={professions} onItemSelect={handleProfessionSelect} />
+      {professions && (
+        <Filter items={professions} onItemSelect={handleProfessionSelect} />
+      )}
+
       {renderTable()}
       <Pagination
         itemsCount={count}
