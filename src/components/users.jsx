@@ -94,28 +94,40 @@ const Users = () => {
   }, [selectedFilter]);
 
   return (
-    <>
-      <Status number={count} />
-      {professions && (
-        <>
-          <Filter
-            items={professions}
-            selectedItem={selectedFilter}
-            onItemSelect={handleProfessionSelect}
-          />
-          <button className="btn btn-secondary mt-2" onClick={clearFilter}>
-            Сброс
-          </button>
-        </>
-      )}
-      {renderTable()}
-      <Pagination
-        itemsCount={count}
-        pageSize={pageSize}
-        currentPage={currentPage}
-        onPageChange={handlePageChange}
-      />
-    </>
+    <div className="container">
+      <div className="row justify-content-center">
+        <div className="col-6 pt-2">
+          <Status number={count} />
+        </div>
+      </div>
+      <div className="row">
+        {professions && (
+          <div className="col-3 p-3">
+            <Filter
+              items={professions}
+              selectedItem={selectedFilter}
+              onItemSelect={handleProfessionSelect}
+            />
+            <button className="btn btn-secondary mt-2" onClick={clearFilter}>
+              Сброс
+            </button>
+          </div>
+        )}
+        <div className="col-9 p-3">
+          {renderTable()}
+          <div className="row justify-content-center">
+            <div className="col-auto">
+              <Pagination
+                itemsCount={count}
+                pageSize={pageSize}
+                currentPage={currentPage}
+                onPageChange={handlePageChange}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
