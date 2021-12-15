@@ -89,6 +89,10 @@ const Users = () => {
     api.professions.fetchAll().then((data) => setProfessions(data));
   }, []);
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedFilter]);
+
   return (
     <>
       <Status number={count} />
