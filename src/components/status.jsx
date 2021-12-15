@@ -7,12 +7,11 @@ const Status = (length) => {
   const titles = ['человек тусанет', 'человека тусанут'];
 
   const declOfNum = (number) => {
+    const cases = [0, 0, 1, 1, 1, 0];
     return titles[
-      number % 10 === 1 && number % 100 !== 11
+      number % 100 > 4 && number % 100 < 20
         ? 0
-        : number % 10 >= 2 &&
-          number % 10 <= 4 &&
-          (number % 100 < 10 || number % 100 >= 20 ? 1 : 0)
+        : cases[number % 10 < 5 ? number % 10 : 5]
     ];
   };
 
@@ -26,7 +25,6 @@ const Status = (length) => {
     classes += 'danger';
     phrase = 'Никто с тобой не тусанет :(';
   }
-
   return <span className={classes}>{phrase}</span>;
 };
 
