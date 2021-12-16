@@ -7,29 +7,33 @@ import paginate from '../utils/paginate';
 import Filter from './filter';
 
 const Users = () => {
-  const [users, setUsers] = useState(api.users.fetchAll());
-  const [currentPage, setCurrentPage] = useState(1);
+  const [users, setUsers] = useState();
   const [professions, setProfessions] = useState();
+  const [currentPage, setCurrentPage] = useState(1);
   const [selectedFilter, setSelectedFilter] = useState();
 
-  // useEffect(() => {
-  //   api.users.fetchAll().then((data) => setUsers(data));
-  // }, []);
+  useEffect(() => {
+    api.users.fetchAll().then((data) => setUsers(data));
+  }, []);
 
   useEffect(() => {
     api.professions.fetchAll().then((data) => setProfessions(data));
   }, []);
 
   const pageSize = 4;
-  const filteredUsers =
+  const filteredUsers = () =>
     Object.prototype.toString.call(selectedFilter) === '[object Object]'
       ? users.filter((user) => user.profession === selectedFilter)
       : users &&
         (Object.prototype.toString.call(selectedFilter) === '[object String]'
           ? users.filter((user) => user.profession._id === selectedFilter)
           : users);
-  const userCrop = paginate(filteredUsers, currentPage, pageSize);
-  const count = filteredUsers.length;
+  const userCrop = function () {
+    return paginate(filteredUsers(), currentPage, pageSize);
+  };
+  const count = function () {
+    return filteredUsers().length;
+  };
 
   const renderTable = () => {
     return (
@@ -47,7 +51,7 @@ const Users = () => {
             </tr>
           </thead>
           <tbody>
-            {userCrop.map((user) => (
+            {userCrop().map((user) => (
               <User
                 key={user._id}
                 {...user}
@@ -96,40 +100,42 @@ const Users = () => {
   }, [selectedFilter]);
 
   return (
-    <div className="container">
-      <div className="row justify-content-center">
-        <div className="col-6 pt-2">
-          <Status number={count} />
-        </div>
-      </div>
-      <div className="row">
-        {professions && (
-          <div className="col-3 p-3">
-            <Filter
-              items={professions}
-              selectedItem={selectedFilter}
-              onItemSelect={handleProfessionSelect}
-            />
-            <button className="btn btn-secondary mt-2" onClick={clearFilter}>
-              Сброс
-            </button>
-          </div>
-        )}
-        <div className="col-9 p-3">
-          {renderTable()}
+    <>
+      {users && professions && (
+        <div className="container">
           <div className="row justify-content-center">
-            <div className="col-auto">
-              <Pagination
-                itemsCount={count}
-                pageSize={pageSize}
-                currentPage={currentPage}
-                onPageChange={handlePageChange}
+            <div className="col-6 pt-2">
+              <Status number={count()} />
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-3 p-3">
+              <Filter
+                items={professions}
+                selectedItem={selectedFilter}
+                onItemSelect={handleProfessionSelect}
               />
+              <button className="btn btn-secondary mt-2" onClick={clearFilter}>
+                Сброс
+              </button>
+            </div>
+            <div className="col-9 p-3">
+              {renderTable()}
+              <div className="row justify-content-center">
+                <div className="col-auto">
+                  <Pagination
+                    itemsCount={count()}
+                    pageSize={pageSize}
+                    currentPage={currentPage}
+                    onPageChange={handlePageChange}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 
