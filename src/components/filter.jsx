@@ -10,18 +10,34 @@ const Filter = ({
 }) => {
   return (
     <ul className="list-group">
-      {Object.keys(items).map((item) => (
-        <li
-          key={items[item][valueProperty]}
-          className={
-            'list-group-item' + (items[item] === selectedItem ? ' active' : '')
-          }
-          onClick={() => onItemSelect(items[item])}
-          role="button"
-        >
-          {items[item][contentProperty]}
-        </li>
-      ))}
+      {Object.prototype.toString.call(items) === '[object Object]' &&
+        Object.keys(items).map((item) => (
+          <li
+            key={items[item][valueProperty]}
+            className={
+              'list-group-item' +
+              (items[item] === selectedItem ? ' active' : '')
+            }
+            onClick={() => onItemSelect(items[item])}
+            role="button"
+          >
+            {items[item][contentProperty]}
+          </li>
+        ))}
+      {Object.prototype.toString.call(items) === '[object Array]' &&
+        items.map((item) => (
+          <li
+            key={item[valueProperty]}
+            className={
+              'list-group-item' +
+              (item[valueProperty] === selectedItem ? ' active' : '')
+            }
+            onClick={() => onItemSelect(item[valueProperty])}
+            role="button"
+          >
+            {item[contentProperty]}
+          </li>
+        ))}
     </ul>
   );
 };
@@ -32,10 +48,10 @@ Filter.defaultProps = {
 };
 
 Filter.propTypes = {
-  items: PropTypes.object.isRequired,
+  items: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   valueProperty: PropTypes.string.isRequired,
   contentProperty: PropTypes.string.isRequired,
-  selectedItem: PropTypes.object,
+  selectedItem: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
   onItemSelect: PropTypes.func
 };
 

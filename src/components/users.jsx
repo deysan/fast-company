@@ -12,10 +12,22 @@ const Users = () => {
   const [professions, setProfessions] = useState();
   const [selectedFilter, setSelectedFilter] = useState();
 
+  // useEffect(() => {
+  //   api.users.fetchAll().then((data) => setUsers(data));
+  // }, []);
+
+  useEffect(() => {
+    api.professions.fetchAll().then((data) => setProfessions(data));
+  }, []);
+
   const pageSize = 4;
-  const filteredUsers = selectedFilter
-    ? users.filter((user) => user.profession === selectedFilter)
-    : users;
+  const filteredUsers =
+    Object.prototype.toString.call(selectedFilter) === '[object Object]'
+      ? users.filter((user) => user.profession === selectedFilter)
+      : users &&
+        (Object.prototype.toString.call(selectedFilter) === '[object String]'
+          ? users.filter((user) => user.profession._id === selectedFilter)
+          : users);
   const userCrop = paginate(filteredUsers, currentPage, pageSize);
   const count = filteredUsers.length;
 
@@ -35,20 +47,14 @@ const Users = () => {
             </tr>
           </thead>
           <tbody>
-            {userCrop.map(
-              (user) => (
-                // eslint-disable-next-line no-sequences
-                !user.isBookmark ? (user.isBookmark = false) : user.isBookmark,
-                (
-                  <User
-                    key={user._id}
-                    {...user}
-                    onDelete={handleDelete}
-                    onBookmark={handleBookmark}
-                  />
-                )
-              )
-            )}
+            {userCrop.map((user) => (
+              <User
+                key={user._id}
+                {...user}
+                onDelete={handleDelete}
+                onBookmark={handleBookmark}
+              />
+            ))}
           </tbody>
         </table>
       )
@@ -84,10 +90,6 @@ const Users = () => {
   const clearFilter = () => {
     setSelectedFilter();
   };
-
-  useEffect(() => {
-    api.professions.fetchAll().then((data) => setProfessions(data));
-  }, []);
 
   useEffect(() => {
     setCurrentPage(1);
