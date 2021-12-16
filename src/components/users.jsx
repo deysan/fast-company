@@ -115,10 +115,8 @@ const Users = () => {
                 items={professions}
                 selectedItem={selectedFilter}
                 onItemSelect={handleProfessionSelect}
+                clearFilter={clearFilter}
               />
-              <button className="btn btn-secondary mt-2" onClick={clearFilter}>
-                Сброс
-              </button>
             </div>
             <div className="col-9 p-3">
               {renderTable()}
