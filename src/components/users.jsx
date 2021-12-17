@@ -52,6 +52,7 @@ const Users = () => {
           users={userCrop()}
           onDelete={handleDelete}
           onBookmark={handleBookmark}
+          currentSort={sortBy}
           onSort={handleSort}
         />
       )
@@ -77,14 +78,7 @@ const Users = () => {
   };
 
   const handleSort = (item) => {
-    if (sortBy.iter === item) {
-      setSortBy((prevState) => ({
-        ...prevState,
-        order: prevState.order === 'asc' ? 'desc' : 'asc'
-      }));
-    } else {
-      setSortBy({ iter: item, order: 'asc' });
-    }
+    setSortBy(item);
     sortedUsers();
   };
 
