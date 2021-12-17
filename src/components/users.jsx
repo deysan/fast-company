@@ -7,12 +7,14 @@ import paginate from '../utils/paginate';
 import Filter from './filter';
 import Preloader from './preloader';
 import Table from './table';
+import _ from 'lodash';
 
 const Users = () => {
   const [users, setUsers] = useState();
   const [professions, setProfessions] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedFilter, setSelectedFilter] = useState();
+  const [sortBy, setSortBy] = useState({ iter: 'name', order: 'asc' });
 
   useEffect(() => {
     api.users.fetchAll().then((data) => setUsers(data));
@@ -30,20 +32,27 @@ const Users = () => {
         (Object.prototype.toString.call(selectedFilter) === '[object String]'
           ? users.filter((user) => user.profession._id === selectedFilter)
           : users);
-  const userCrop = function () {
-    return paginate(filteredUsers(), currentPage, pageSize);
-  };
-  const count = function () {
+
+  const count = () => {
     return filteredUsers().length;
+  };
+
+  const sortedUsers = () => {
+    return _.orderBy(filteredUsers(), [sortBy.iter], [sortBy.order]);
+  };
+
+  const userCrop = () => {
+    return paginate(sortedUsers(), currentPage, pageSize);
   };
 
   const renderTable = () => {
     return (
-      count !== 0 && (
+      count() !== 0 && (
         <Table
           users={userCrop()}
-          handleDelete={handleDelete}
-          handleBookmark={handleBookmark}
+          onDelete={handleDelete}
+          onBookmark={handleBookmark}
+          onSort={handleSort}
         />
       )
     );
@@ -65,6 +74,18 @@ const Users = () => {
     );
 
     setUsers(bookmarkUsers);
+  };
+
+  const handleSort = (item) => {
+    if (sortBy.iter === item) {
+      setSortBy((prevState) => ({
+        ...prevState,
+        order: prevState.order === 'asc' ? 'desc' : 'asc'
+      }));
+    } else {
+      setSortBy({ iter: item, order: 'asc' });
+    }
+    sortedUsers();
   };
 
   const handlePageChange = (pageIndex) => {

@@ -2,17 +2,27 @@ import React from 'react';
 import User from './user';
 import PropTypes from 'prop-types';
 
-const Table = ({ users, handleDelete, handleBookmark }) => {
+const Table = ({ users, onDelete, onBookmark, onSort }) => {
   return (
     <table className="table">
       <thead>
         <tr>
-          <th scope="col">Имя</th>
+          <th onClick={() => onSort('name')} scope="col">
+            Имя
+          </th>
           <th scope="col">Качества</th>
-          <th scope="col">Профессия</th>
-          <th scope="col">Встретился, раз</th>
-          <th scope="col">Оценка</th>
-          <th scope="col">Избранное</th>
+          <th onClick={() => onSort('profession.name')} scope="col">
+            Профессия
+          </th>
+          <th onClick={() => onSort('completedMeetings')} scope="col">
+            Встретился, раз
+          </th>
+          <th onClick={() => onSort('rate')} scope="col">
+            Оценка
+          </th>
+          <th onClick={() => onSort('isBookmark')} scope="col">
+            Избранное
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -21,8 +31,8 @@ const Table = ({ users, handleDelete, handleBookmark }) => {
           <User
             key={user._id}
             {...user}
-            onDelete={handleDelete}
-            onBookmark={handleBookmark}
+            onDelete={onDelete}
+            onBookmark={onBookmark}
           />
         ))}
       </tbody>
@@ -32,8 +42,9 @@ const Table = ({ users, handleDelete, handleBookmark }) => {
 
 Table.propTypes = {
   users: PropTypes.array.isRequired,
-  handleDelete: PropTypes.func.isRequired,
-  handleBookmark: PropTypes.func.isRequired
+  onDelete: PropTypes.func.isRequired,
+  onBookmark: PropTypes.func.isRequired,
+  onSort: PropTypes.func.isRequired
 };
 
 export default Table;
