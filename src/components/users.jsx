@@ -1,11 +1,12 @@
 /* eslint-disable */
 import React, { useState, useEffect } from 'react';
-import User from './user';
 import api from '../api';
 import Status from './status';
 import Pagination from './pagination';
 import paginate from '../utils/paginate';
 import Filter from './filter';
+import Preloader from './preloader';
+import Table from './table';
 
 const Users = () => {
   const [users, setUsers] = useState();
@@ -39,29 +40,11 @@ const Users = () => {
   const renderTable = () => {
     return (
       count !== 0 && (
-        <table className="table">
-          <thead>
-            <tr>
-              <th scope="col">Имя</th>
-              <th scope="col">Качества</th>
-              <th scope="col">Профессия</th>
-              <th scope="col">Встретился, раз</th>
-              <th scope="col">Оценка</th>
-              <th scope="col">Избранное</th>
-              <th scope="col"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {userCrop().map((user) => (
-              <User
-                key={user._id}
-                {...user}
-                onDelete={handleDelete}
-                onBookmark={handleBookmark}
-              />
-            ))}
-          </tbody>
-        </table>
+        <Table
+          users={userCrop()}
+          handleDelete={handleDelete}
+          handleBookmark={handleBookmark}
+        />
       )
     );
   };
@@ -134,11 +117,7 @@ const Users = () => {
           </div>
         </div>
       ) : (
-        <div className="position-absolute top-50 start-50 translate-middle">
-          <div className="spinner-border" role="status">
-            <span className="visually-hidden">Загрузка...</span>
-          </div>
-        </div>
+        <Preloader />
       )}
     </>
   );
