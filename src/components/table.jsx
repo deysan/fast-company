@@ -1,42 +1,26 @@
 import React from 'react';
 import User from './user';
+import TableHeader from './tableHeader';
 import PropTypes from 'prop-types';
 
-const Table = ({ users, onDelete, onBookmark, currentSort, onSort }) => {
-  const handleSort = (item) => {
-    if (currentSort.iter === item) {
-      onSort({
-        ...currentSort,
-        order: currentSort.order === 'asc' ? 'desc' : 'asc'
-      });
-    } else {
-      onSort({ iter: item, order: 'asc' });
-    }
+const Table = ({ users, onDelete, onBookmark, selectedSort, onSort }) => {
+  const columns = {
+    name: { iter: 'name', name: 'Имя' },
+    qualities: { name: 'Качества' },
+    professions: { iter: 'profession.name', name: 'Профессия' },
+    completedMeetings: { iter: 'completedMeetings', name: 'Встретился, раз' },
+    rate: { iter: 'rate', name: 'Оценка' },
+    isBookmark: { name: 'Избранное' },
+    delete: {}
   };
 
   return (
     <table className="table">
-      <thead>
-        <tr>
-          <th onClick={() => handleSort('name')} scope="col">
-            Имя
-          </th>
-          <th scope="col">Качества</th>
-          <th onClick={() => handleSort('profession.name')} scope="col">
-            Профессия
-          </th>
-          <th onClick={() => handleSort('completedMeetings')} scope="col">
-            Встретился, раз
-          </th>
-          <th onClick={() => handleSort('rate')} scope="col">
-            Оценка
-          </th>
-          <th onClick={() => handleSort('isBookmark')} scope="col">
-            Избранное
-          </th>
-          <th scope="col"></th>
-        </tr>
-      </thead>
+      <TableHeader
+        selectedSort={selectedSort}
+        onSort={onSort}
+        columns={columns}
+      />
       <tbody>
         {users.map((user) => (
           <User
@@ -55,7 +39,7 @@ Table.propTypes = {
   users: PropTypes.array.isRequired,
   onDelete: PropTypes.func.isRequired,
   onBookmark: PropTypes.func.isRequired,
-  currentSort: PropTypes.object.isRequired,
+  selectedSort: PropTypes.object.isRequired,
   onSort: PropTypes.func.isRequired
 };
 

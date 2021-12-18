@@ -52,7 +52,7 @@ const Users = () => {
           users={userCrop()}
           onDelete={handleDelete}
           onBookmark={handleBookmark}
-          currentSort={sortBy}
+          selectedSort={sortBy}
           onSort={handleSort}
         />
       )
