@@ -1,17 +1,37 @@
 import React from 'react';
-import User from './user';
 import TableHeader from './tableHeader';
+import TableBody from './tableBody';
+import Bookmark from './bookmark';
 import PropTypes from 'prop-types';
 
 const Table = ({ users, onDelete, onBookmark, selectedSort, onSort }) => {
   const columns = {
-    name: { iter: 'name', name: 'Имя' },
+    name: { path: 'name', name: 'Имя' },
     qualities: { name: 'Качества' },
-    professions: { iter: 'profession.name', name: 'Профессия' },
-    completedMeetings: { iter: 'completedMeetings', name: 'Встретился, раз' },
-    rate: { iter: 'rate', name: 'Оценка' },
-    isBookmark: { name: 'Избранное' },
-    delete: {}
+    professions: { path: 'profession.name', name: 'Профессия' },
+    completedMeetings: { path: 'completedMeetings', name: 'Встретился, раз' },
+    rate: { path: 'rate', name: 'Оценка' },
+    isBookmark: {
+      name: 'Избранное',
+      component: (user) => (
+        <Bookmark
+          id={user._id}
+          isBookmark={user.isBookmark}
+          onBookmark={onBookmark}
+        />
+      )
+    },
+    delete: {
+      component: (user) => (
+        <button
+          className="btn btn-danger"
+          type="submit"
+          onClick={() => onDelete(user._id)}
+        >
+          Удалить
+        </button>
+      )
+    }
   };
 
   return (
@@ -21,16 +41,7 @@ const Table = ({ users, onDelete, onBookmark, selectedSort, onSort }) => {
         onSort={onSort}
         columns={columns}
       />
-      <tbody>
-        {users.map((user) => (
-          <User
-            key={user._id}
-            {...user}
-            onDelete={onDelete}
-            onBookmark={onBookmark}
-          />
-        ))}
-      </tbody>
+      <TableBody data={users} columns={columns} />
     </table>
   );
 };

@@ -38,7 +38,7 @@ const Users = () => {
   };
 
   const sortedUsers = () => {
-    return _.orderBy(filteredUsers(), [sortBy.iter], [sortBy.order]);
+    return _.orderBy(filteredUsers(), [sortBy.path], [sortBy.order]);
   };
 
   const userCrop = () => {
