@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
-function TableBody({ users, data, columns, onDelete, onBookmark }) {
+function TableBody({ data, columns }) {
   const MAX_RATING = 5;
 
   const renderContent = (item, column) => {
