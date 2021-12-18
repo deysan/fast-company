@@ -1,13 +1,17 @@
 import React from 'react';
 import TableHeader from './tableHeader';
 import TableBody from './tableBody';
+import Qualities from './qualities';
 import Bookmark from './bookmark';
 import PropTypes from 'prop-types';
 
 const Table = ({ users, onDelete, onBookmark, selectedSort, onSort }) => {
   const columns = {
     name: { path: 'name', name: 'Имя' },
-    qualities: { name: 'Качества' },
+    qualities: {
+      name: 'Качества',
+      component: (user) => <Qualities qualities={user.qualities} />
+    },
     professions: { path: 'profession.name', name: 'Профессия' },
     completedMeetings: { path: 'completedMeetings', name: 'Встретился, раз' },
     rate: { path: 'rate', name: 'Оценка' },
