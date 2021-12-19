@@ -1,12 +1,11 @@
-/* eslint-disable */
 import React, { useState, useEffect } from 'react';
 import api from '../api';
+import paginate from '../utils/paginate';
 import Status from './status';
 import Pagination from './pagination';
-import paginate from '../utils/paginate';
 import Filter from './filter';
 import Preloader from './preloader';
-import Table from './table';
+import UsersTable from './usersTable';
 import _ from 'lodash';
 
 const Users = () => {
@@ -17,8 +16,10 @@ const Users = () => {
   const [sortBy, setSortBy] = useState({
     path: 'name',
     order: 'asc',
-    icon: ''
+    icon: 'up'
   });
+
+  const pageSize = 4;
 
   useEffect(() => {
     api.users.fetchAll().then((data) => setUsers(data));
@@ -27,41 +28,6 @@ const Users = () => {
   useEffect(() => {
     api.professions.fetchAll().then((data) => setProfessions(data));
   }, []);
-
-  const pageSize = 4;
-  const filteredUsers = () =>
-    Object.prototype.toString.call(selectedFilter) === '[object Object]'
-      ? users.filter((user) => user.profession === selectedFilter)
-      : users &&
-        (Object.prototype.toString.call(selectedFilter) === '[object String]'
-          ? users.filter((user) => user.profession._id === selectedFilter)
-          : users);
-
-  const count = () => {
-    return filteredUsers().length;
-  };
-
-  const sortedUsers = () => {
-    return _.orderBy(filteredUsers(), [sortBy.path], [sortBy.order]);
-  };
-
-  const userCrop = () => {
-    return paginate(sortedUsers(), currentPage, pageSize);
-  };
-
-  const renderTable = () => {
-    return (
-      count() !== 0 && (
-        <Table
-          users={userCrop()}
-          onDelete={handleDelete}
-          onBookmark={handleBookmark}
-          selectedSort={sortBy}
-          onSort={handleSort}
-        />
-      )
-    );
-  };
 
   const handleDelete = (userId) => {
     setUsers((prevState) => prevState.filter((user) => user._id !== userId));
@@ -83,7 +49,6 @@ const Users = () => {
 
   const handleSort = (item) => {
     setSortBy(item);
-    sortedUsers();
   };
 
   const handlePageChange = (pageIndex) => {
@@ -102,30 +67,47 @@ const Users = () => {
     setCurrentPage(1);
   }, [selectedFilter]);
 
-  return (
-    <>
-      {users && professions ? (
-        <div className="container">
-          <div className="row justify-content-center">
-            <div className="col-6 pt-2">
-              <Status number={count()} />
-            </div>
+  if (users && professions) {
+    const filteredUsers = selectedFilter
+      ? users.filter(
+          (user) =>
+            JSON.stringify(user.profession) === JSON.stringify(selectedFilter)
+        )
+      : users;
+
+    const count = filteredUsers.length;
+    const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
+    const userCrop = paginate(sortedUsers, currentPage, pageSize);
+
+    return (
+      <div className="container">
+        <div className="row justify-content-center">
+          <div className="col-6 pt-2">
+            <Status number={count} />
           </div>
-          <div className="row">
-            <div className="col-3 p-3">
-              <Filter
-                items={professions}
-                selectedItem={selectedFilter}
-                onItemSelect={handleProfessionSelect}
-                clearFilter={clearFilter}
-              />
-            </div>
+        </div>
+        <div className="row">
+          <div className="col-3 p-3">
+            <Filter
+              items={professions}
+              selectedItem={selectedFilter}
+              onItemSelect={handleProfessionSelect}
+              clearFilter={clearFilter}
+            />
+          </div>
+          {count !== 0 && (
             <div className="col-9 p-3">
-              {renderTable()}
+              <UsersTable
+                users={userCrop}
+                onDelete={handleDelete}
+                onBookmark={handleBookmark}
+                selectedSort={sortBy}
+                onSort={handleSort}
+              />
               <div className="row justify-content-center">
                 <div className="col-auto">
                   <Pagination
-                    itemsCount={count()}
+                    itemsCount={count}
                     pageSize={pageSize}
                     currentPage={currentPage}
                     onPageChange={handlePageChange}
@@ -133,13 +115,13 @@ const Users = () => {
                 </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
-      ) : (
-        <Preloader />
-      )}
-    </>
-  );
+      </div>
+    );
+  } else {
+    return <Preloader />;
+  }
 };
 
 export default Users;

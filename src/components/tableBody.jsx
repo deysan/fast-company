@@ -38,10 +38,7 @@ function TableBody({ data, columns }) {
 
 TableBody.propTypes = {
   data: PropTypes.array.isRequired,
-  users: PropTypes.array.isRequired,
-  columns: PropTypes.object.isRequired,
-  onDelete: PropTypes.func.isRequired,
-  onBookmark: PropTypes.func.isRequired
+  columns: PropTypes.object.isRequired
 };
 
 export default TableBody;

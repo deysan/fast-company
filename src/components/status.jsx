@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Status = (length) => {
-  const { number } = length;
-
+const Status = ({ number }) => {
   const titles = ['человек тусанет', 'человека тусанут'];
 
   const declOfNum = (number) => {
