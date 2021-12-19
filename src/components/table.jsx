@@ -41,9 +41,9 @@ const Table = ({ users, onDelete, onBookmark, selectedSort, onSort }) => {
   return (
     <table className="table">
       <TableHeader
+        columns={columns}
         selectedSort={selectedSort}
         onSort={onSort}
-        columns={columns}
       />
       <TableBody data={users} columns={columns} />
     </table>
@@ -56,6 +56,7 @@ Table.propTypes = {
   onBookmark: PropTypes.func.isRequired,
   selectedSort: PropTypes.object.isRequired,
   onSort: PropTypes.func.isRequired
+  // onSort: PropTypes.func.isRequired
 };
 
 export default Table;

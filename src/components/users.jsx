@@ -14,7 +14,11 @@ const Users = () => {
   const [professions, setProfessions] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedFilter, setSelectedFilter] = useState();
-  const [sortBy, setSortBy] = useState({ iter: 'name', order: 'asc' });
+  const [sortBy, setSortBy] = useState({
+    path: 'name',
+    order: 'asc',
+    icon: ''
+  });
 
   useEffect(() => {
     api.users.fetchAll().then((data) => setUsers(data));

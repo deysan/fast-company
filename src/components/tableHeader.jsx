@@ -6,10 +6,11 @@ function TableHeader({ columns, selectedSort, onSort }) {
     if (selectedSort.path === item) {
       onSort({
         ...selectedSort,
-        order: selectedSort.order === 'asc' ? 'desc' : 'asc'
+        order: selectedSort.order === 'asc' ? 'desc' : 'asc',
+        icon: selectedSort.icon === 'up' ? 'down' : 'up'
       });
     } else {
-      onSort({ path: item, order: 'asc' });
+      onSort({ path: item, order: 'asc', icon: 'up' });
     }
   };
 
@@ -28,6 +29,9 @@ function TableHeader({ columns, selectedSort, onSort }) {
             scope="col"
           >
             {columns[column].name}
+            {selectedSort.path === columns[column].path && (
+              <i className={`bi bi-caret-${selectedSort.icon}-fill`}></i>
+            )}
           </th>
         ))}
       </tr>
