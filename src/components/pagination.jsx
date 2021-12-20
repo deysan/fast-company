@@ -1,12 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 
 const Pagination = (props) => {
   const { itemsCount, pageSize, currentPage, onPageChange } = props;
   const pageCount = Math.ceil(itemsCount / pageSize);
-  if (pageCount === 1) return null;
   const pages = _.range(1, pageCount + 1);
+
+  useEffect(() => {
+    if (pages.length < currentPage) {
+      onPageChange(pages.length);
+    }
+  }, [pageCount]);
+
+  if (pageCount === 1) return null;
 
   return (
     <nav aria-label="Page navigation">
