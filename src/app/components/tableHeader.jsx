@@ -28,7 +28,7 @@ function TableHeader({ columns, selectedSort, onSort }) {
             {...{ role: columns[column].path && 'button' }}
             scope="col"
           >
-            {columns[column].name}
+            {columns[column].name}{' '}
             {selectedSort.path === columns[column].path && (
               <i className={`bi bi-caret-${selectedSort.icon}-fill`}></i>
             )}
