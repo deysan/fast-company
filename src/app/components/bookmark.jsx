@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Bookmark = (props) => {
-  const { isBookmark, onBookmark, id } = props;
-
+const Bookmark = ({ isBookmark, onBookmark, id }) => {
   const getBookmarkClasses = () => {
     let classes = 'bi bi-';
     classes += isBookmark === true ? 'bookmark-fill' : 'bookmark';
