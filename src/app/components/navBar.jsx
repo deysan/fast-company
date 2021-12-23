@@ -1,23 +1,29 @@
 import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
 const NavBar = () => {
+  const { pathname } = useLocation();
+
+  const getClasses = (path) =>
+    pathname === path ? 'nav-link active' : 'nav-link';
+
   return (
     <div className="container">
       <ul className="nav nav-tabs">
         <li className="nav-item">
-          <a className="nav-link active" aria-current="page" href="/">
+          <Link className={getClasses('/')} to="/">
             Main
-          </a>
+          </Link>
         </li>
         <li className="nav-item">
-          <a className="nav-link" href="/login">
+          <Link className={getClasses('/login')} to="/login">
             Login
-          </a>
+          </Link>
         </li>
         <li className="nav-item">
-          <a className="nav-link" href="/users">
+          <Link className={getClasses('/users')} to="/users">
             Users
-          </a>
+          </Link>
         </li>
       </ul>
     </div>
