@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-// import { Link } from 'react-router-dom';
 
 const TableBody = ({ data, columns }) => {
   const MAX_RATING = 5;
@@ -20,14 +19,6 @@ const TableBody = ({ data, columns }) => {
     if (columns[column].path === 'rate') {
       return `${item[columns[column].path]} / ${MAX_RATING}`;
     }
-
-    // if (columns[column].path === 'name') {
-    //   return (
-    //     <Link to={`#${columns[column].path}`}>
-    //       {item[columns[column].path]}
-    //     </Link>
-    //   );
-    // }
     return _.get(item, columns[column].path);
   };
 
