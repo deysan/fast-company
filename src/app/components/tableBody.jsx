@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
+// import { Link } from 'react-router-dom';
 
-function TableBody({ data, columns }) {
+const TableBody = ({ data, columns }) => {
   const MAX_RATING = 5;
 
   const renderContent = (item, column) => {
@@ -20,6 +21,13 @@ function TableBody({ data, columns }) {
       return `${item[columns[column].path]} / ${MAX_RATING}`;
     }
 
+    // if (columns[column].path === 'name') {
+    //   return (
+    //     <Link to={`#${columns[column].path}`}>
+    //       {item[columns[column].path]}
+    //     </Link>
+    //   );
+    // }
     return _.get(item, columns[column].path);
   };
 
@@ -34,7 +42,7 @@ function TableBody({ data, columns }) {
       ))}
     </tbody>
   );
-}
+};
 
 TableBody.propTypes = {
   data: PropTypes.array.isRequired,

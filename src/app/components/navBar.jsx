@@ -4,8 +4,16 @@ import { Link, useLocation } from 'react-router-dom';
 const NavBar = () => {
   const { pathname } = useLocation();
 
-  const getClasses = (path) =>
-    pathname === path ? 'nav-link active' : 'nav-link';
+  const getClasses = (path) => {
+    const classes = 'nav-link';
+    const classesActive = `${classes} active`;
+
+    if (pathname.length > 1 && pathname.slice(-1) === '/') {
+      return pathname.slice(0, -1) === path ? classesActive : classes;
+    }
+
+    return pathname === path ? classesActive : classes;
+  };
 
   return (
     <div className="container">
