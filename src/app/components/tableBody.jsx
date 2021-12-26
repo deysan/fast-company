@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
-function TableBody({ data, columns }) {
+const TableBody = ({ data, columns }) => {
   const MAX_RATING = 5;
 
   const renderContent = (item, column) => {
@@ -19,7 +19,6 @@ function TableBody({ data, columns }) {
     if (columns[column].path === 'rate') {
       return `${item[columns[column].path]} / ${MAX_RATING}`;
     }
-
     return _.get(item, columns[column].path);
   };
 
@@ -34,7 +33,7 @@ function TableBody({ data, columns }) {
       ))}
     </tbody>
   );
-}
+};
 
 TableBody.propTypes = {
   data: PropTypes.array.isRequired,

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import api from '../api';
 import paginate from '../utils/paginate';
-import Status from './status';
-import Pagination from './pagination';
-import Filter from './filter';
-import Preloader from './preloader';
-import UsersTable from './usersTable';
+import Status from '../components/status';
+import Pagination from '../components/pagination';
+import Filter from '../components/filter';
+import Preloader from '../components/preloader';
+import UsersTable from '../components/usersTable';
 import _ from 'lodash';
 
 const Users = () => {
