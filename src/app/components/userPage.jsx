@@ -30,7 +30,7 @@ const UserPage = () => {
             <h5 className="card-subtitle mb-2 fw-normal">
               Оценка: <span className="fw-bold">{user.rate}</span>
             </h5>
-            <Link to="/users" className="btn btn-warning" role="button">
+            <Link to="/users" className="btn btn-outline-warning" role="button">
               Все пользователи
             </Link>
           </div>
