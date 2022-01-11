@@ -12,12 +12,25 @@ const Login = () => {
   const validatorConfig = {
     email: {
       isRequired: {
-        message: 'Please enter a valid email!'
+        message: 'Электронная почта обязательна для заполнения'
+      },
+      isEmail: {
+        message: 'Email введен некорректно'
       }
     },
     password: {
       isRequired: {
-        message: 'Please enter a valid password!'
+        message: 'Пароль обязателен для заполнения'
+      },
+      isCapitalSymbol: {
+        message: 'Пароль должен содержать хотя бы одну заглавную букву'
+      },
+      isContainDigit: {
+        message: 'Пароль должен содержать хотя бы одно число'
+      },
+      minLengthPassword: {
+        message: 'Пароль должен состоять минимум из 8 символов',
+        value: 8
       }
     }
   };
