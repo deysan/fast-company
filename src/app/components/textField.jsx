@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const TextField = ({ label, type, name, value, onChange }) => {
+const TextField = ({ label, type, name, value, onChange, error }) => {
   return (
-    <>
+    <div className="input-group has-validation mb-3">
       <label htmlFor={name} className="form-label">
         {label}
       </label>
@@ -13,9 +13,10 @@ const TextField = ({ label, type, name, value, onChange }) => {
         name={name}
         value={value}
         onChange={onChange}
-        className="form-control"
+        className={`form-control is-${error ? 'invalid' : 'valid'}`}
       />
-    </>
+      {error && <div className="invalid-feedback">{error}</div>}
+    </div>
   );
 };
 
@@ -28,7 +29,8 @@ TextField.propTypes = {
   type: PropTypes.string,
   name: PropTypes.string,
   value: PropTypes.string,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  error: PropTypes.string
 };
 
 export default TextField;
