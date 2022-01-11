@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import TextField from '../components/textField';
 
 const Login = () => {
   const [data, setData] = useState({
@@ -15,29 +16,24 @@ const Login = () => {
       <h1>Login & Password</h1>
       <form>
         <div className="mb-3">
-          <label htmlFor="email" className="form-label">
-            Email address
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
+          <TextField
+            label={'Email address'}
+            type={'email'}
+            name={'email'}
             value={data.email}
             onChange={handleChange}
-            className="form-control"
           />
         </div>
         <div className="mb-3">
           <label htmlFor="password" className="form-label">
             Password
           </label>
-          <input
-            type="password"
-            id="password"
-            name="password"
+          <TextField
+            label={'Password'}
+            type={'password'}
+            name={'password'}
             value={data.password}
             onChange={handleChange}
-            className="form-control"
           />
         </div>
         <button type="submit" className="btn btn-primary">
