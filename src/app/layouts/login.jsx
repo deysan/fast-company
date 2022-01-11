@@ -56,6 +56,8 @@ const Login = () => {
     console.log(data);
   };
 
+  const isValid = Object.keys(errors).length === 0;
+
   return (
     <div className="container">
       <h1>Login & Password</h1>
@@ -76,7 +78,7 @@ const Login = () => {
           onChange={handleChange}
           error={errors.password}
         />
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className="btn btn-primary" disabled={!isValid}>
           Submit
         </button>
       </form>
