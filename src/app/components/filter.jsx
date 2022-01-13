@@ -11,21 +11,26 @@ const Filter = ({
 }) => {
   if (!Array.isArray(items)) {
     return (
-      <ul className="list-group">
-        {Object.keys(items).map((item) => (
-          <li
-            key={items[item][valueProperty]}
-            className={
-              'list-group-item' +
-              (items[item] === selectedItem ? ' active' : '')
-            }
-            onClick={() => onItemSelect(items[item])}
-            role="button"
-          >
-            {items[item][contentProperty]}
-          </li>
-        ))}
-      </ul>
+      <>
+        <ul className="list-group">
+          {Object.keys(items).map((item) => (
+            <li
+              key={items[item][valueProperty]}
+              className={
+                'list-group-item' +
+                (items[item] === selectedItem ? ' active' : '')
+              }
+              onClick={() => onItemSelect(items[item])}
+              role="button"
+            >
+              {items[item][contentProperty]}
+            </li>
+          ))}
+        </ul>
+        <button className="btn btn-secondary mt-2" onClick={clearFilter}>
+          Сброс
+        </button>
+      </>
     );
   }
   return (
