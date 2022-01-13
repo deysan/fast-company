@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import api from '../api';
-import Qualities from './qualities';
+import { useHistory } from 'react-router-dom';
+import api from '../../../api';
+import Qualities from '../../ui/qualities/qualities';
+import PropTypes from 'prop-types';
 
-const UserPage = () => {
+const UserPage = ({ userId }) => {
   const [user, setUser] = useState();
-  const { userId } = useParams();
+  const history = useHistory();
 
   useEffect(() => {
     api.users.getById(userId).then((data) => setUser(data));
   }, []);
+
+  const handleClick = () => {
+    history.push('/users');
+  };
 
   if (user) {
     return (
@@ -30,9 +35,13 @@ const UserPage = () => {
             <h5 className="card-subtitle mb-2 fw-normal">
               Оценка: <span className="fw-bold">{user.rate}</span>
             </h5>
-            <Link to="/users" className="btn btn-warning" role="button">
+            <button
+              className="btn btn-warning"
+              type="button"
+              onClick={handleClick}
+            >
               Все пользователи
-            </Link>
+            </button>
           </div>
         </div>
       </div>
@@ -44,6 +53,10 @@ const UserPage = () => {
       </div>
     );
   }
+};
+
+UserPage.propTypes = {
+  userId: PropTypes.string
 };
 
 export default UserPage;

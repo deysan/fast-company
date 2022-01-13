@@ -1,9 +1,7 @@
 import React from 'react';
-import Table from './table';
-import TableHeader from './tableHeader';
-import TableBody from './tableBody';
-import Qualities from './qualities';
-import Bookmark from './bookmark';
+import Table from '../common/table';
+import Qualities from './qualities/qualities';
+import Bookmark from '../common/bookmark';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
@@ -50,14 +48,7 @@ const UsersTable = ({ users, onDelete, onBookmark, selectedSort, onSort }) => {
       columns={columns}
       selectedSort={selectedSort}
       onSort={onSort}
-    >
-      <TableHeader
-        columns={columns}
-        selectedSort={selectedSort}
-        onSort={onSort}
-      />
-      <TableBody data={users} columns={columns} />
-    </Table>
+    />
   );
 };
 

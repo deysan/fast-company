@@ -8,12 +8,8 @@ const Table = ({ data, columns, selectedSort, onSort, children }) => {
     <table className="table">
       {children || (
         <>
-          <TableHeader
-            columns={columns}
-            selectedSort={selectedSort}
-            onSort={onSort}
-          />
-          <TableBody data={data} columns={columns} />
+          <TableHeader {...{ columns, selectedSort, onSort }} />
+          <TableBody {...{ data, columns }} />
         </>
       )}
     </table>
