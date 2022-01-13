@@ -1,5 +1,5 @@
 import React from 'react';
-import Table from '../common/table';
+import { Table } from '../common/table';
 import Qualities from './qualities';
 import Bookmark from '../common/bookmark';
 import PropTypes from 'prop-types';
