@@ -11,7 +11,8 @@ const RegisterForm = () => {
     email: '',
     password: '',
     profession: '',
-    sex: 'male'
+    sex: 'male',
+    qualities: []
   });
   const [errors, setErrors] = useState({});
   const [professions, setProfessions] = useState();
@@ -63,7 +64,7 @@ const RegisterForm = () => {
     return Object.keys(errors).length === 0;
   };
 
-  const handleChange = ({ target }) => {
+  const handleChange = (target) => {
     setData((prevState) => ({ ...prevState, [target.name]: target.value }));
   };
 
@@ -79,17 +80,17 @@ const RegisterForm = () => {
   return (
     <form onSubmit={handleSubmit}>
       <TextField
-        label={'Электронная почта'}
-        type={'email'}
-        name={'email'}
+        label="Электронная почта"
+        type="email"
+        name="email"
         value={data.email}
         onChange={handleChange}
         error={errors.email}
       />
       <TextField
-        label={'Пароль'}
-        type={'password'}
-        name={'password'}
+        label="Пароль"
+        type="password"
+        name="password"
         value={data.password}
         onChange={handleChange}
         error={errors.password}
@@ -104,6 +105,7 @@ const RegisterForm = () => {
         error={errors.profession}
       />
       <RadioField
+        label="Выберите ваш пол"
         name="sex"
         value={data.sex}
         options={[
@@ -114,6 +116,7 @@ const RegisterForm = () => {
         onChange={handleChange}
       />
       <MultiSelectField
+        label="Выберите ваши качества"
         name="qualities"
         options={qualities}
         onChange={handleChange}
