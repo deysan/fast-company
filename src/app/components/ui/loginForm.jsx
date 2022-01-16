@@ -76,7 +76,11 @@ const LoginForm = () => {
         onChange={handleChange}
         error={errors.password}
       />
-      <button type="submit" className="btn btn-primary" disabled={!isValid}>
+      <button
+        type="submit"
+        className="btn btn-primary  mb-2"
+        disabled={!isValid}
+      >
         Submit
       </button>
     </form>

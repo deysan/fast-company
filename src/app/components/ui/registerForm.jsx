@@ -1,13 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import TextField from '../../components/common/form/textField';
 import { validator } from '../../utils/validator';
+import api from '../../api';
+import SelectField from '../common/form/selectField';
 
 const RegisterForm = () => {
   const [data, setData] = useState({
     email: '',
-    password: ''
+    password: '',
+    profession: ''
   });
   const [errors, setErrors] = useState({});
+  const [professions, setProfessions] = useState();
+
+  useEffect(() => {
+    api.professions.fetchAll().then((data) => setProfessions(data));
+  }, []);
 
   const validatorConfig = {
     email: {
@@ -31,6 +39,11 @@ const RegisterForm = () => {
       minLengthPassword: {
         message: 'Пароль должен состоять минимум из 8 символов',
         value: 8
+      }
+    },
+    profession: {
+      isRequired: {
+        message: 'Обязательно выберите профессию'
       }
     }
   };
@@ -76,7 +89,19 @@ const RegisterForm = () => {
         onChange={handleChange}
         error={errors.password}
       />
-      <button type="submit" className="btn btn-primary" disabled={!isValid}>
+      <SelectField
+        label={'Выберите вашу профессию'}
+        value={data.profession}
+        option={professions}
+        defaultOption="Choose..."
+        onChange={handleChange}
+        error={errors.profession}
+      />
+      <button
+        type="submit"
+        className="btn btn-primary mb-2"
+        disabled={!isValid}
+      >
         Submit
       </button>
     </form>
