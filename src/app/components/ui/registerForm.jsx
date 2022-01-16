@@ -128,6 +128,7 @@ const RegisterForm = () => {
         name="qualities"
         options={qualities}
         onChange={handleChange}
+        defaultValue={data.qualities}
       />
       <CheckBoxField
         name="licence"
