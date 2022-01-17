@@ -82,7 +82,9 @@ const UsersList = () => {
             JSON.stringify(user.profession) === JSON.stringify(selectedFilter)
         )
       : searchValue
-      ? users.filter((user) => user.name.toLowerCase().includes(searchValue))
+      ? users.filter((user) =>
+          user.name.toLowerCase().includes(searchValue.toLowerCase())
+        )
       : users;
 
     const count = filteredUsers.length;
