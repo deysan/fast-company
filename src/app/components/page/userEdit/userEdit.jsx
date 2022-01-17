@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-// import { useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import api from '../../../api';
 import PropTypes from 'prop-types';
 import TextField from '../../common/form/textField';
@@ -13,7 +13,7 @@ const UserEdit = ({ userId }) => {
   const [errors, setErrors] = useState({});
   const [professions, setProfessions] = useState();
   const [qualities, setQualities] = useState();
-  // const history = useHistory();
+  const history = useHistory();
 
   useEffect(() => {
     api.users.getById(userId).then((data) => setUser(data));
@@ -36,9 +36,10 @@ const UserEdit = ({ userId }) => {
     return Object.keys(errors).length === 0;
   };
 
-  // const handleClick = () => {
-  //   history.replace(`/users/${userId}`);
-  // };
+  const handleSave = () => {
+    api.users.update(userId, user);
+    history.replace(`/users/${userId}`);
+  };
 
   const handleChange = (target) => {
     if (target.name === 'profession') {
@@ -121,7 +122,7 @@ const UserEdit = ({ userId }) => {
               <button
                 className="btn btn-success"
                 type="submin"
-                // onClick={handleClick}
+                onClick={handleSave}
               >
                 Сохранить изминения
               </button>
