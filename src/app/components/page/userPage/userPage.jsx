@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import api from '../../../api';
 import Qualities from '../../ui/qualities';
 import PropTypes from 'prop-types';
@@ -7,13 +7,14 @@ import PropTypes from 'prop-types';
 const UserPage = ({ userId }) => {
   const [user, setUser] = useState();
   const history = useHistory();
+  const { pathname } = useLocation();
 
   useEffect(() => {
     api.users.getById(userId).then((data) => setUser(data));
   }, []);
 
   const handleClick = () => {
-    history.push('/users');
+    history.push(`${pathname}/edit`);
   };
 
   if (user) {
@@ -40,8 +41,13 @@ const UserPage = ({ userId }) => {
               type="button"
               onClick={handleClick}
             >
-              Все пользователи
+              Изменить данные
             </button>
+            <div className="mt-4">
+              <Link className="btn btn-secondary" type="button" to="/users">
+                Все пользователи
+              </Link>
+            </div>
           </div>
         </div>
       </div>
