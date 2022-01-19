@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import api from '../../../api';
 import PropTypes from 'prop-types';
-import TextField from '../../common/form/textField';
+import api from '../../../api';
 import * as yup from 'yup';
-import SelectField from '../../common/form/selectField';
-import RadioField from '../../common/form/radioField';
-import MultiSelectField from '../../common/form/multiSelectField';
+import {
+  TextField,
+  RadioField,
+  SelectField,
+  MultiSelectField
+} from '../../common/form';
 
 const UserEdit = ({ userId }) => {
   const [user, setUser] = useState();
@@ -121,10 +123,10 @@ const UserEdit = ({ userId }) => {
               />
               <button
                 className="btn btn-success"
-                type="submin"
+                type="submit"
                 onClick={handleSave}
               >
-                Сохранить изминения
+                Сохранить изменения
               </button>
             </form>
           </div>
