@@ -64,7 +64,12 @@ const RegisterForm = () => {
 
   return (
     <FormComponent defaultData={data} validatorConfig={validatorConfig}>
-      <TextField label="Электронная почта" type="email" name="email" />
+      <TextField
+        label="Электронная почта"
+        type="email"
+        name="email"
+        autoFocus
+      />
       <TextField label="Пароль" type="password" name="password" />
       <SelectField
         label="Выберите вашу профессию"

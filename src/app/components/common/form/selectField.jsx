@@ -8,7 +8,8 @@ const SelectField = ({
   options,
   defaultOption,
   onChange,
-  error
+  error,
+  ...rest
 }) => {
   const getInputClasses = () => {
     return 'form-select' + (error ? ' is-invalid' : '');
@@ -29,6 +30,7 @@ const SelectField = ({
         name={name}
         value={value}
         onChange={handleChange}
+        {...rest}
       >
         <option value="" disabled>
           {defaultOption}

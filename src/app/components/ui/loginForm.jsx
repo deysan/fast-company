@@ -57,7 +57,12 @@ const LoginForm = () => {
 
   return (
     <FormComponent defaultData={data} validateSchema={validateSchema}>
-      <TextField label="Электронная почта" type="email" name="email" />
+      <TextField
+        label="Электронная почта"
+        type="email"
+        name="email"
+        autoFocus
+      />
       <TextField label="Пароль" type="password" name="password" />
       <CheckBoxField name="stayOn">Оставаться в системе</CheckBoxField>
       <button type="submit" className="btn btn-primary mb-2">
