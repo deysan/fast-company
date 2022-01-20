@@ -45,4 +45,4 @@ RadioField.propTypes = {
   onChange: PropTypes.func
 };
 
-export default RadioField;
+export default React.memo(RadioField);

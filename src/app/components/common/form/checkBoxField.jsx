@@ -40,4 +40,4 @@ CheckBoxField.propTypes = {
   error: PropTypes.string
 };
 
-export default CheckBoxField;
+export default React.memo(CheckBoxField);

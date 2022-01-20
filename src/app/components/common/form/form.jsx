@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { validator } from '../../../utils/validator';
 import PropTypes from 'prop-types';
 
@@ -11,34 +11,38 @@ const FormComponent = ({
   const [data, setData] = useState(defaultData || {});
   const [errors, setErrors] = useState({});
 
-  const handleChange = (target) => {
+  const handleChange = useCallback((target) => {
     setData((prevState) => ({ ...prevState, [target.name]: target.value }));
-  };
+  }, []);
 
   useEffect(() => {
     if (Object.keys(data).length > 0) {
-      validate();
+      validate(data);
     }
   }, [data]);
 
-  const validate = () => {
-    if (validatorConfig) {
-      const errors = validator(data, validatorConfig);
-      setErrors(errors);
-    }
+  const validate = useCallback(
+    (data) => {
+      if (validatorConfig) {
+        const errors = validator(data, validatorConfig);
+        setErrors(errors);
+      }
 
-    if (validateSchema) {
-      validateSchema
-        .validate(data)
-        .then(() => setErrors({}))
-        .catch((error) => setErrors({ [error.path]: error.message }));
-    }
-    return Object.keys(errors).length === 0;
-  };
+      if (validateSchema) {
+        validateSchema
+          .validate(data)
+          .then(() => setErrors({}))
+          .catch((error) => setErrors({ [error.path]: error.message }));
+      }
+
+      return Object.keys(errors).length === 0;
+    },
+    [validatorConfig, validateSchema, errors]
+  );
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const isValid = validate();
+    const isValid = validate(data);
     if (!isValid) return;
     console.log(data);
   };
@@ -49,7 +53,7 @@ const FormComponent = ({
     const childType = typeof child.type;
     let config = {};
 
-    if (childType === 'function') {
+    if (childType === 'object') {
       if (!child.props.name) {
         throw new Error(
           'Name property is required for field components!',
