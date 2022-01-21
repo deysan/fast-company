@@ -3,17 +3,13 @@ import TableHeader from './tableHeader';
 import TableBody from './tableBody';
 import PropTypes from 'prop-types';
 
-const Table = ({ data, columns, selectedSort, onSort, children }) => {
+export const Table = ({ data, columns, selectedSort, onSort, children }) => {
   return (
     <table className="table">
       {children || (
         <>
-          <TableHeader
-            columns={columns}
-            selectedSort={selectedSort}
-            onSort={onSort}
-          />
-          <TableBody data={data} columns={columns} />
+          <TableHeader {...{ columns, selectedSort, onSort }} />
+          <TableBody {...{ data, columns }} />
         </>
       )}
     </table>
@@ -27,5 +23,3 @@ Table.propTypes = {
   onSort: PropTypes.func,
   children: PropTypes.array
 };
-
-export default Table;
