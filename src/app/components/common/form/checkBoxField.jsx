@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const CheckBoxField = ({ name, value, onChange, children, error }) => {
+const CheckBoxField = ({ name, value, onChange, children, error, ...rest }) => {
   const getInputClasses = () => {
     return 'form-check-input' + (error ? ' is-invalid' : ' is-valid');
   };
@@ -20,6 +20,7 @@ const CheckBoxField = ({ name, value, onChange, children, error }) => {
         name={name}
         checked={value}
         onChange={handleChange}
+        {...rest}
       />
       <label className="form-check-label" htmlFor={name}>
         {children}
@@ -40,4 +41,4 @@ CheckBoxField.propTypes = {
   error: PropTypes.string
 };
 
-export default CheckBoxField;
+export default React.memo(CheckBoxField);
