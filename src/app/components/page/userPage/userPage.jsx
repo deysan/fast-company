@@ -32,7 +32,11 @@ const UserPage = ({ userId }) => {
                 </button>
                 <div className="d-flex flex-column align-items-center text-center position-relative">
                   <img
-                    src="https://avatars.dicebear.com/api/avataaars/qweqwdas.svg"
+                    src={`https://avatars.dicebear.com/api/avataaars/${(
+                      Math.random() + 1
+                    )
+                      .toString(36)
+                      .substring(7)}.svg`}
                     className="rounded-circle"
                     width="150"
                   />
