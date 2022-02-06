@@ -9,19 +9,34 @@ import CommentsList from './components/commentsList';
 import CommentsForm from './components/commentsForm';
 
 const UserPage = ({ userId }) => {
+  const [users, setUsers] = useState();
   const [user, setUser] = useState();
+  const [comments, setComments] = useState();
   const history = useHistory();
   const { pathname } = useLocation();
 
   useEffect(() => {
+    api.users.fetchAll().then((data) => setUsers(data));
     api.users.getById(userId).then((data) => setUser(data));
+    api.comments.fetchCommentsForUser(userId).then((data) => setComments(data));
   }, []);
 
   const handleClick = () => {
     history.push(`${pathname}/edit`);
   };
 
-  if (user) {
+  const handleCommentDelete = (commentId) => {
+    api.comments.remove(commentId);
+    setComments((prevState) =>
+      prevState.filter((comment) => comment._id !== commentId)
+    );
+  };
+
+  const handleChange = (target) => {
+    console.log(target);
+  };
+
+  if (users && user) {
     return (
       <div className="container">
         <div className="row gutters-sm mt-3">
@@ -32,8 +47,11 @@ const UserPage = ({ userId }) => {
           </div>
 
           <div className="col-md-8">
-            <CommentsForm />
-            <CommentsList />
+            <CommentsForm users={users} handleChange={handleChange} />
+            <CommentsList
+              comments={comments}
+              handleCommentDelete={handleCommentDelete}
+            />
           </div>
         </div>
 
