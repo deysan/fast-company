@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import api from '../../../api';
 import PropTypes from 'prop-types';
-import UserCard from './components/userCard';
-import QualitiesCard from './components/qualitiesCard';
-import MeetingsCard from './components/meetingsCard';
+import UserCard from '../../ui/userCard';
+import QualitiesCard from '../../ui/qualitiesCard';
+import MeetingsCard from '../../ui/meetingsCard';
 import CommentsList from './components/commentsList';
 import CommentsForm from './components/commentsForm';
+import { orderBy } from 'lodash';
 
 const UserPage = ({ userId }) => {
   const [users, setUsers] = useState();
@@ -25,7 +26,7 @@ const UserPage = ({ userId }) => {
     history.push(`${pathname}/edit`);
   };
 
-  const handleCommentDelete = (commentId) => {
+  const handleDeleteComment = (commentId) => {
     api.comments.remove(commentId);
     setComments((prevState) =>
       prevState.filter((comment) => comment._id !== commentId)
@@ -35,6 +36,8 @@ const UserPage = ({ userId }) => {
   const handleChange = (target) => {
     console.log(target);
   };
+
+  const sortedComments = orderBy(comments, ['created_at'], ['desc']);
 
   if (users && user) {
     return (
@@ -48,10 +51,12 @@ const UserPage = ({ userId }) => {
 
           <div className="col-md-8">
             <CommentsForm users={users} handleChange={handleChange} />
-            <CommentsList
-              comments={comments}
-              handleCommentDelete={handleCommentDelete}
-            />
+            {sortedComments.length > 0 && (
+              <CommentsList
+                comments={sortedComments}
+                onDelete={handleDeleteComment}
+              />
+            )}
           </div>
         </div>
 
