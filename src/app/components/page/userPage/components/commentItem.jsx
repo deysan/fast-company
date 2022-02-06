@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import API from '../../../../api';
 import Preloader from '../../../ui/preloader';
+import { displayDate } from '../../../../utils/displayDate';
 
 const CommentItem = ({
   userId,
@@ -38,7 +39,7 @@ const CommentItem = ({
                   <div className="d-flex justify-content-between align-items-center">
                     <p className="mb-1">
                       {user.name}
-                      <span className="small"> - {created}</span>
+                      <span className="small"> - {displayDate(created)}</span>
                     </p>
                     <button
                       className="btn btn-sm text-primary d-flex align-items-center"
