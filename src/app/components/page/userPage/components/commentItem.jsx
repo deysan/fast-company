@@ -63,7 +63,7 @@ const CommentItem = ({
 
 CommentItem.propTypes = {
   userId: PropTypes.string,
-  created_at: PropTypes.string,
+  created_at: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   _id: PropTypes.string,
   content: PropTypes.string,
   onDelete: PropTypes.func

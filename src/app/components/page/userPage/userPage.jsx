@@ -6,7 +6,7 @@ import UserCard from '../../ui/userCard';
 import QualitiesCard from '../../ui/qualitiesCard';
 import MeetingsCard from '../../ui/meetingsCard';
 import CommentsList from './components/commentsList';
-import CommentsForm from './components/commentsForm';
+import CommentForm from './components/commentForm';
 import { orderBy } from 'lodash';
 
 const UserPage = ({ userId }) => {
@@ -26,15 +26,16 @@ const UserPage = ({ userId }) => {
     history.push(`${pathname}/edit`);
   };
 
-  const handleDeleteComment = (commentId) => {
-    api.comments.remove(commentId);
-    setComments((prevState) =>
-      prevState.filter((comment) => comment._id !== commentId)
-    );
+  const handleSubmit = (data) => {
+    api.comments
+      .add({ ...data, pageId: userId })
+      .then((newComment) => setComments([...comments, newComment]));
   };
 
-  const handleChange = (target) => {
-    console.log(target);
+  const handleDeleteComment = (commentId) => {
+    api.comments.remove(commentId).then((commentId) => {
+      setComments(comments.filter((comment) => comment._id !== commentId));
+    });
   };
 
   const sortedComments = orderBy(comments, ['created_at'], ['desc']);
@@ -50,7 +51,7 @@ const UserPage = ({ userId }) => {
           </div>
 
           <div className="col-md-8">
-            <CommentsForm users={users} handleChange={handleChange} />
+            <CommentForm users={users} onSubmit={handleSubmit} />
             {sortedComments.length > 0 && (
               <CommentsList
                 comments={sortedComments}
