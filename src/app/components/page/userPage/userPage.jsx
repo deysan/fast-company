@@ -28,17 +28,14 @@ const UserPage = ({ userId }) => {
             <UserCard user={user} handleClick={handleClick} />
             <QualitiesCard qualities={user.qualities} />
             <MeetingsCard completedMeetings={user.completedMeetings} />
+            <Link className="btn btn-secondary mb-3" type="button" to="/users">
+              Все пользователи
+            </Link>
           </div>
 
           <div className="col-md-8">
             <Comments />
           </div>
-        </div>
-
-        <div className="d-flex flex-row-reverse">
-          <Link className="btn btn-secondary mb-3" type="button" to="/users">
-            Все пользователи
-          </Link>
         </div>
       </div>
     );
