@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import api from '../../../api';
+import Preloader from '../../ui/preloader';
+import { displayDate } from '../../../utils/displayDate';
 import PropTypes from 'prop-types';
-import API from '../../../../api';
-import Preloader from '../../../ui/preloader';
-import { displayDate } from '../../../../utils/displayDate';
 
 const CommentItem = ({
   userId,
@@ -14,7 +14,7 @@ const CommentItem = ({
   const [user, setUser] = useState();
 
   useEffect(() => {
-    API.users.getById(userId).then((data) => setUser(data));
+    api.users.getById(userId).then((data) => setUser(data));
   }, []);
 
   if (user) {

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import SelectField from '../../../common/form/selectField';
-import { validator } from '../../../../utils/validator';
+import SelectField from '../form/selectField';
+import { validator } from '../../../utils/validator';
 import PropTypes from 'prop-types';
-import TextAreaField from '../../../common/form/textAreaField';
+import TextAreaField from '../form/textAreaField';
 
 const initialData = { userId: '', content: '' };
 
@@ -51,25 +51,21 @@ const CommentForm = ({ users, onSubmit }) => {
         <div>
           <h2>New comment</h2>
           <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-              <SelectField
-                name="userId"
-                value={data.userId}
-                options={users}
-                defaultOption="Выберите пользователя"
-                onChange={handleChange}
-                error={errors.userId}
-              />
-            </div>
-            <div className="mb-3">
-              <TextAreaField
-                label="Сообщение"
-                name="content"
-                value={data.content}
-                onChange={handleChange}
-                error={errors.content}
-              />
-            </div>
+            <SelectField
+              name="userId"
+              value={data.userId}
+              options={users}
+              defaultOption="Выберите пользователя"
+              onChange={handleChange}
+              error={errors.userId}
+            />
+            <TextAreaField
+              label="Сообщение"
+              name="content"
+              value={data.content}
+              onChange={handleChange}
+              error={errors.content}
+            />
             <div className="d-flex justify-content-end">
               <button className="btn btn-primary">Опубликовать</button>
             </div>
