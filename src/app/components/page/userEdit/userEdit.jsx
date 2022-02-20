@@ -9,6 +9,7 @@ import {
   SelectField,
   MultiSelectField
 } from '../../common/form';
+import BackHistoryButton from '../../common/backButton';
 
 const UserEdit = ({ userId }) => {
   const [user, setUser] = useState();
@@ -76,59 +77,66 @@ const UserEdit = ({ userId }) => {
 
   if (user) {
     return (
-      <div className="container">
-        <div className="card w-50 mt-3">
-          <div className="card-body">
-            <form onSubmit={handleSubmit}>
-              <TextField
-                label="Имя"
-                name="name"
-                value={user.name}
-                onChange={handleChange}
-              />
-              <TextField
-                label="Электронная почта"
-                type="email"
-                name="email"
-                value={user.email}
-                onChange={handleChange}
-                error={errors.email}
-              />
-              <SelectField
-                label="Выбери свою профессию"
-                name="profession"
-                value={user.profession._id}
-                options={professions}
-                defaultOption="Choose..."
-                onChange={handleChange}
-                error={errors.profession}
-              />
-              <RadioField
-                label="Выберите ваш пол"
-                name="sex"
-                value={user.sex}
-                options={[
-                  { name: 'Male', value: 'male' },
-                  { name: 'Female', value: 'female' },
-                  { name: 'Other', value: 'other' }
-                ]}
-                onChange={handleChange}
-              />
-              <MultiSelectField
-                label="Выберите ваши качества"
-                name="qualities"
-                options={qualities}
-                onChange={handleChange}
-                defaultValue={{ ...user.qualities }}
-              />
-              <button
-                className="btn btn-success"
-                type="submit"
-                onClick={handleSave}
-              >
-                Сохранить изменения
-              </button>
-            </form>
+      <div className="container mt-3">
+        <div className="row gutters-sm mt-3">
+          <div className="col-md-2">
+            <BackHistoryButton />
+          </div>
+          <div className="col-md-6">
+            <div className="card w-100 shadow">
+              <div className="card-body">
+                <form onSubmit={handleSubmit}>
+                  <TextField
+                    label="Имя"
+                    name="name"
+                    value={user.name}
+                    onChange={handleChange}
+                  />
+                  <TextField
+                    label="Электронная почта"
+                    type="email"
+                    name="email"
+                    value={user.email}
+                    onChange={handleChange}
+                    error={errors.email}
+                  />
+                  <SelectField
+                    label="Выбери свою профессию"
+                    name="profession"
+                    value={user.profession._id}
+                    options={professions}
+                    defaultOption="Choose..."
+                    onChange={handleChange}
+                    error={errors.profession}
+                  />
+                  <RadioField
+                    label="Выберите ваш пол"
+                    name="sex"
+                    value={user.sex}
+                    options={[
+                      { name: 'Male', value: 'male' },
+                      { name: 'Female', value: 'female' },
+                      { name: 'Other', value: 'other' }
+                    ]}
+                    onChange={handleChange}
+                  />
+                  <MultiSelectField
+                    label="Выберите ваши качества"
+                    name="qualities"
+                    options={qualities}
+                    onChange={handleChange}
+                    defaultValue={{ ...user.qualities }}
+                  />
+                  <button
+                    className="btn btn-success"
+                    type="submit"
+                    onClick={handleSave}
+                  >
+                    Сохранить изменения
+                  </button>
+                </form>
+              </div>
+            </div>
           </div>
         </div>
       </div>
