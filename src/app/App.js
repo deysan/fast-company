@@ -6,6 +6,7 @@ import Main from './layouts/main';
 import Users from './layouts/users';
 import NotFound from './layouts/notFound';
 import { ToastContainer } from 'react-toastify';
+import { ProfessionProvider } from './hooks/useProfession';
 
 function App() {
   const { pathname } = useLocation();
@@ -14,9 +15,11 @@ function App() {
       <NavBar />
       <Switch>
         <Redirect from="/:url*(/+)" to={pathname.slice(0, -1)} />
-        <Route path="/users/:userId?/:edit?" component={Users} />
+        <ProfessionProvider>
+          <Route path="/users/:userId?/:edit?" component={Users} />
+          <Route path="/login/:type?" component={Login} />
+        </ProfessionProvider>
         <Route exact path="/" component={Main} />
-        <Route path="/login/:type?" component={Login} />
         <Route path="/404" component={NotFound} />
         <Redirect to="/404" />
       </Switch>
