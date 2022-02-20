@@ -8,9 +8,11 @@ import Preloader from '../../ui/preloader';
 import UsersTable from '../../ui/usersTable';
 import Search from '../../common/search';
 import _ from 'lodash';
+import { useUser } from '../../../hooks/useUsers';
 
 const UsersList = () => {
-  const [users, setUsers] = useState();
+  // const [users, setUsers] = useState();
+  const { users } = useUser();
   const [professions, setProfessions] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedFilter, setSelectedFilter] = useState();
@@ -23,16 +25,17 @@ const UsersList = () => {
 
   const pageSize = 4;
 
-  useEffect(() => {
-    api.users.fetchAll().then((data) => setUsers(data));
-  }, []);
+  // useEffect(() => {
+  //   api.users.fetchAll().then((data) => setUsers(data));
+  // }, []);
 
   useEffect(() => {
     api.professions.fetchAll().then((data) => setProfessions(data));
   }, []);
 
   const handleDelete = (userId) => {
-    setUsers((prevState) => prevState.filter((user) => user._id !== userId));
+    // setUsers((prevState) => prevState.filter((user) => user._id !== userId));
+    console.log(userId);
   };
 
   const handleBookmark = (userId) => {
@@ -46,7 +49,8 @@ const UsersList = () => {
         : user.isBookmark
     );
 
-    setUsers(bookmarkUsers);
+    // setUsers(bookmarkUsers);
+    console.log(bookmarkUsers);
   };
 
   const handleSort = (item) => {
