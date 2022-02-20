@@ -12,9 +12,11 @@ const Qualities = ({ qualities }) => {
     const quality = getQuality(qualitie);
 
     return (
-      <span key={quality._id} className={`badge me-1 bg-${quality.color}`}>
-        {quality.name}
-      </span>
+      quality && (
+        <span key={quality._id} className={`badge me-1 bg-${quality.color}`}>
+          {quality.name}
+        </span>
+      )
     );
   });
 };
