@@ -5,6 +5,7 @@ import Login from './layouts/login';
 import Main from './layouts/main';
 import Users from './layouts/users';
 import NotFound from './layouts/notFound';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
   const { pathname } = useLocation();
@@ -19,6 +20,7 @@ function App() {
         <Route path="/404" component={NotFound} />
         <Redirect to="/404" />
       </Switch>
+      <ToastContainer />
     </>
   );
 }
