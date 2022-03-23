@@ -5,20 +5,28 @@ import Login from './layouts/login';
 import Main from './layouts/main';
 import Users from './layouts/users';
 import NotFound from './layouts/notFound';
+import { ToastContainer } from 'react-toastify';
+import { ProfessionProvider } from './hooks/useProfession';
+import { QualitiesProvider } from './hooks/useQualities';
 
 function App() {
   const { pathname } = useLocation();
   return (
     <>
       <NavBar />
-      <Switch>
-        <Redirect from="/:url*(/+)" to={pathname.slice(0, -1)} />
-        <Route path="/users/:userId?/:edit?" component={Users} />
-        <Route exact path="/" component={Main} />
-        <Route path="/login/:type?" component={Login} />
-        <Route path="/404" component={NotFound} />
-        <Redirect to="/404" />
-      </Switch>
+      <QualitiesProvider>
+        <ProfessionProvider>
+          <Switch>
+            <Redirect from="/:url*(/+)" to={pathname.slice(0, -1)} />
+            <Route path="/users/:userId?/:edit?" component={Users} />
+            <Route path="/login/:type?" component={Login} />
+            <Route exact path="/" component={Main} />
+            <Route path="/404" component={NotFound} />
+            <Redirect to="/404" />
+          </Switch>
+        </ProfessionProvider>
+      </QualitiesProvider>
+      <ToastContainer />
     </>
   );
 }
