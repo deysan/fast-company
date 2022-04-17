@@ -8,7 +8,10 @@ const FormComponent = ({
   children,
   validatorConfig,
   validateSchema,
-  signUp
+  signUp,
+  logIn,
+  enterError,
+  setEnterError
 }) => {
   const history = useHistory();
 
@@ -17,6 +20,7 @@ const FormComponent = ({
 
   const handleChange = useCallback((target) => {
     setData((prevState) => ({ ...prevState, [target.name]: target.value }));
+    setEnterError && setEnterError(null);
   }, []);
 
   useEffect(() => {
@@ -39,7 +43,7 @@ const FormComponent = ({
           .catch((error) => setErrors({ [error.path]: error.message }));
       }
 
-      return Object.keys(errors).length === 0;
+      return Object.keys(errors).length === 0 && enterError === null;
     },
     [validatorConfig, validateSchema, errors]
   );
@@ -47,20 +51,33 @@ const FormComponent = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     const isValid = validate(data);
-    if (!isValid) return;
+    if (!isValid || enterError) return;
 
-    const newData = {
-      ...data,
-      qualities: data.qualities.map((quality) => quality.value)
-    };
+    if (logIn) {
+      console.log(data);
 
-    console.log(newData);
+      try {
+        await logIn(data);
+        history.push('/users');
+      } catch (error) {
+        setEnterError(error.message);
+      }
+    }
 
-    try {
-      await signUp(newData);
-      history.push('/');
-    } catch (error) {
-      setErrors(error);
+    if (signUp) {
+      const newData = {
+        ...data,
+        qualities: data.qualities.map((quality) => quality.value)
+      };
+
+      console.log(newData);
+
+      try {
+        await signUp(data);
+        history.push('/');
+      } catch (error) {
+        setErrors(error);
+      }
     }
   };
 
@@ -99,7 +116,7 @@ const FormComponent = ({
     if (childType === 'string') {
       if (child.type === 'button') {
         if (child.props.type === 'submit' || child.props.type === undefined) {
-          config = { ...child.props, disabled: !isValid };
+          config = { ...child.props, disabled: !isValid || enterError };
         }
       }
     }
@@ -118,7 +135,10 @@ FormComponent.propTypes = {
   ]),
   validatorConfig: PropTypes.object,
   validateSchema: PropTypes.object,
-  signUp: PropTypes.func
+  signUp: PropTypes.func,
+  logIn: PropTypes.func,
+  enterError: PropTypes.object,
+  setEnterError: PropTypes.func
 };
 
 export default FormComponent;
