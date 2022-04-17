@@ -1,6 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import userService from '../services/user.service';
 import { setTokens } from '../services/localStorage.service';
 
 const httpAuth = axios.create();
@@ -11,7 +12,9 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-  async function signUp({ email, password }) {
+  const [currentUser, setUser] = useState({});
+
+  async function signUp({ email, password, ...rest }) {
     const url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBIowVWhGkDNqLPFQfcWoxHw6ABZKgZbh0`;
 
     const { data } = await httpAuth.post(url, {
@@ -20,11 +23,19 @@ export const AuthProvider = ({ children }) => {
       returnSecureToken: true
     });
     setTokens(data);
+    await createUser({ _id: data.localId, email, ...rest });
     console.log(data);
   }
 
+  async function createUser(data) {
+    const { content } = userService.create(data);
+    setUser(content);
+  }
+
   return (
-    <AuthContext.Provider value={{ signUp }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ signUp, currentUser }}>
+      {children}
+    </AuthContext.Provider>
   );
 };
 
