@@ -44,7 +44,11 @@ const FormComponent = ({
     e.preventDefault();
     const isValid = validate(data);
     if (!isValid) return;
-    console.log(data);
+    const newDate = {
+      ...data,
+      qualities: data.qualities.map((quality) => quality.value)
+    };
+    console.log(newDate);
   };
 
   const handleKeyDown = useCallback((e) => {
