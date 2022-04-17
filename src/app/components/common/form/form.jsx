@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { validator } from '../../../utils/validator';
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 
 const FormComponent = ({
   defaultData,
@@ -9,6 +10,8 @@ const FormComponent = ({
   validateSchema,
   signUp
 }) => {
+  const history = useHistory();
+
   const [data, setData] = useState(defaultData || {});
   const [errors, setErrors] = useState({});
 
@@ -41,16 +44,24 @@ const FormComponent = ({
     [validatorConfig, validateSchema, errors]
   );
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const isValid = validate(data);
     if (!isValid) return;
+
     const newData = {
       ...data,
       qualities: data.qualities.map((quality) => quality.value)
     };
+
     console.log(newData);
-    signUp(newData);
+
+    try {
+      await signUp(newData);
+      history.push('/');
+    } catch (error) {
+      setErrors(error);
+    }
   };
 
   const handleKeyDown = useCallback((e) => {
