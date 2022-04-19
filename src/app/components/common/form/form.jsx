@@ -6,7 +6,8 @@ const FormComponent = ({
   defaultData,
   children,
   validatorConfig,
-  validateSchema
+  validateSchema,
+  signUp
 }) => {
   const [data, setData] = useState(defaultData || {});
   const [errors, setErrors] = useState({});
@@ -44,11 +45,12 @@ const FormComponent = ({
     e.preventDefault();
     const isValid = validate(data);
     if (!isValid) return;
-    const newDate = {
+    const newData = {
       ...data,
       qualities: data.qualities.map((quality) => quality.value)
     };
-    console.log(newDate);
+    console.log(newData);
+    signUp(newData);
   };
 
   const handleKeyDown = useCallback((e) => {
@@ -104,7 +106,8 @@ FormComponent.propTypes = {
     PropTypes.node
   ]),
   validatorConfig: PropTypes.object,
-  validateSchema: PropTypes.object
+  validateSchema: PropTypes.object,
+  signUp: PropTypes.func
 };
 
 export default FormComponent;

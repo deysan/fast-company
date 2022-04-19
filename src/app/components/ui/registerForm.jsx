@@ -8,6 +8,7 @@ import FormComponent, {
 } from '../common/form';
 import { useProfessions } from '../../hooks/useProfession';
 import { useQualities } from '../../hooks/useQualities';
+import { useAuth } from '../../hooks/useAuth';
 
 const RegisterForm = () => {
   const [data] = useState({
@@ -20,6 +21,7 @@ const RegisterForm = () => {
   });
   const { professions } = useProfessions();
   const { qualities } = useQualities();
+  const { signUp } = useAuth();
 
   const qualitiesList = qualities.map((quality) => ({
     label: quality.name,
@@ -64,7 +66,11 @@ const RegisterForm = () => {
   };
 
   return (
-    <FormComponent defaultData={data} validatorConfig={validatorConfig}>
+    <FormComponent
+      defaultData={data}
+      validatorConfig={validatorConfig}
+      signUp={signUp}
+    >
       <TextField
         label="Электронная почта"
         type="email"
