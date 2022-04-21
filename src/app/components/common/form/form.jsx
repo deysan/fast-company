@@ -8,7 +8,10 @@ const FormComponent = ({
   children,
   validatorConfig,
   validateSchema,
-  signUp
+  signUp,
+  logIn,
+  enterError,
+  setEnterError
 }) => {
   const history = useHistory();
 
@@ -17,6 +20,7 @@ const FormComponent = ({
 
   const handleChange = useCallback((target) => {
     setData((prevState) => ({ ...prevState, [target.name]: target.value }));
+    setEnterError && setEnterError(null);
   }, []);
 
   useEffect(() => {
@@ -39,7 +43,9 @@ const FormComponent = ({
           .catch((error) => setErrors({ [error.path]: error.message }));
       }
 
-      return Object.keys(errors).length === 0;
+      return logIn
+        ? Object.keys(errors).length === 0 || enterError === null
+        : Object.keys(errors).length === 0;
     },
     [validatorConfig, validateSchema, errors]
   );
@@ -47,19 +53,33 @@ const FormComponent = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     const isValid = validate(data);
-    if (!isValid) return;
-    const newData = {
-      ...data,
-      qualities: data.qualities.map((quality) => quality.value)
-    };
+    if (!isValid || enterError) return;
 
-    console.log(newData);
+    if (logIn) {
+      console.log(data);
 
-    try {
-      await signUp(newData);
-      history.push('/');
-    } catch (error) {
-      setErrors(error);
+      try {
+        await logIn(data);
+        history.push('/users');
+      } catch (error) {
+        setEnterError(error.message);
+      }
+    }
+
+    if (signUp) {
+      const newData = {
+        ...data,
+        qualities: data.qualities.map((quality) => quality.value)
+      };
+
+      console.log(newData);
+
+      try {
+        await signUp(data);
+        history.push('/');
+      } catch (error) {
+        setErrors(error);
+      }
     }
   };
 
@@ -98,7 +118,7 @@ const FormComponent = ({
     if (childType === 'string') {
       if (child.type === 'button') {
         if (child.props.type === 'submit' || child.props.type === undefined) {
-          config = { ...child.props, disabled: !isValid };
+          config = { ...child.props, disabled: !isValid || enterError };
         }
       }
     }
@@ -117,7 +137,10 @@ FormComponent.propTypes = {
   ]),
   validatorConfig: PropTypes.object,
   validateSchema: PropTypes.object,
-  signUp: PropTypes.func
+  signUp: PropTypes.func,
+  logIn: PropTypes.func,
+  enterError: PropTypes.object,
+  setEnterError: PropTypes.func
 };
 
 export default FormComponent;
