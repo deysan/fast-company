@@ -1,0 +1,112 @@
+import React, { useContext, useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import axios from 'axios';
+import userService from '../services/user.service';
+import { setTokens } from '../services/localStorage.service';
+import { toast } from 'react-toastify';
+
+const httpAuth = axios.create({
+  baseURL: 'https://identitytoolkit.googleapis.com/v1/',
+  params: {
+    key: process.env.REACT_APP_FIREBASE_KEY
+  }
+});
+const AuthContext = React.createContext();
+
+export const useAuth = () => {
+  return useContext(AuthContext);
+};
+
+export const AuthProvider = ({ children }) => {
+  const [currentUser, setUser] = useState({});
+  const [error, setError] = useState(null);
+
+  async function logIn({ email, password }) {
+    try {
+      const { data } = await httpAuth.post(`accounts:signInWithPassword`, {
+        email,
+        password,
+        returnSecureToken: true
+      });
+      setTokens(data);
+    } catch (error) {
+      errorCatcher(error);
+      const { code, message } = error.response.data.error;
+
+      if (code === 400) {
+        switch (message) {
+          case 'USER_DISABLED':
+            throw new Error(
+              'Учетная запись пользователя отключена администратором.'
+            );
+          case 'EMAIL_NOT_FOUND':
+          case 'INVALID_PASSWORD':
+          case 'INVALID_EMAIL':
+            throw new Error('Неверный email или пароль');
+          default:
+            throw new Error('Слишком много попыток входа, попробуйте позже');
+        }
+      }
+    }
+  }
+
+  async function signUp({ email, password, ...rest }) {
+    try {
+      const { data } = await httpAuth.post('accounts:signUp', {
+        email,
+        password,
+        returnSecureToken: true
+      });
+      setTokens(data);
+      await createUser({ _id: data.localId, email, ...rest });
+    } catch (error) {
+      errorCatcher(error);
+      const { code, message } = error.response.data.error;
+
+      if (code === 400) {
+        if (message === 'EMAIL_EXISTS') {
+          const errorObject = {
+            email: 'Пользователь с таким Email уже существует'
+          };
+          throw errorObject;
+        }
+      }
+    }
+  }
+
+  async function createUser(data) {
+    try {
+      const { content } = userService.create(data);
+      setUser(content);
+    } catch (error) {
+      errorCatcher(error);
+    }
+  }
+
+  function errorCatcher(error) {
+    const { message } = error.response.data.error;
+    setError(message);
+  }
+
+  useEffect(() => {
+    if (error !== null) {
+      toast.error(error);
+      setError(null);
+    }
+  }, [error]);
+
+  return (
+    <AuthContext.Provider value={{ signUp, logIn, currentUser }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+AuthProvider.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
+  ])
+};
+
+export default AuthProvider;

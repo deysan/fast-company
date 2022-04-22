@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import FormComponent, {
   TextField,
   CheckBoxField,
@@ -6,7 +6,9 @@ import FormComponent, {
   SelectField,
   MultiSelectField
 } from '../common/form';
-import api from '../../api';
+import { useProfessions } from '../../hooks/useProfession';
+import { useQualities } from '../../hooks/useQualities';
+import { useAuth } from '../../hooks/useAuth';
 
 const RegisterForm = () => {
   const [data] = useState({
@@ -17,13 +19,14 @@ const RegisterForm = () => {
     qualities: [],
     license: false
   });
-  const [professions, setProfessions] = useState();
-  const [qualities, setQualities] = useState();
+  const { professions } = useProfessions();
+  const { qualities } = useQualities();
+  const { signUp } = useAuth();
 
-  useEffect(() => {
-    api.professions.fetchAll().then((data) => setProfessions(data));
-    api.qualities.fetchAll().then((data) => setQualities(data));
-  }, []);
+  const qualitiesList = qualities.map((quality) => ({
+    label: quality.name,
+    value: quality._id
+  }));
 
   const validatorConfig = {
     email: {
@@ -63,7 +66,11 @@ const RegisterForm = () => {
   };
 
   return (
-    <FormComponent defaultData={data} validatorConfig={validatorConfig}>
+    <FormComponent
+      defaultData={data}
+      validatorConfig={validatorConfig}
+      signUp={signUp}
+    >
       <TextField
         label="Электронная почта"
         type="email"
@@ -89,7 +96,7 @@ const RegisterForm = () => {
       <MultiSelectField
         label="Выберите ваши качества"
         name="qualities"
-        options={qualities}
+        options={qualitiesList}
         defaultValue={data.qualities}
       />
       <CheckBoxField name="license">
