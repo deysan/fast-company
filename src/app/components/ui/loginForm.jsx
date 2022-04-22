@@ -11,8 +11,6 @@ const LoginForm = () => {
   });
   const [enterError, setEnterError] = useState(null);
 
-  console.log(enterError);
-
   const { logIn } = useAuth();
 
   const validateSchema = yup.object().shape({

@@ -139,7 +139,7 @@ FormComponent.propTypes = {
   validateSchema: PropTypes.object,
   signUp: PropTypes.func,
   logIn: PropTypes.func,
-  enterError: PropTypes.object,
+  enterError: PropTypes.string,
   setEnterError: PropTypes.func
 };
 

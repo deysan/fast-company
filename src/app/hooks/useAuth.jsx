@@ -35,10 +35,16 @@ export const AuthProvider = ({ children }) => {
 
       if (code === 400) {
         switch (message) {
+          case 'USER_DISABLED':
+            throw new Error(
+              'Учетная запись пользователя отключена администратором.'
+            );
+          case 'EMAIL_NOT_FOUND':
           case 'INVALID_PASSWORD':
-            throw new Error('Email или пароль введены некорректно');
+          case 'INVALID_EMAIL':
+            throw new Error('Неверный email или пароль');
           default:
-            throw new Error('Слишком много попыток входа. Попробуйте позже');
+            throw new Error('Слишком много попыток входа, попробуйте позже');
         }
       }
     }
@@ -78,13 +84,13 @@ export const AuthProvider = ({ children }) => {
   }
 
   function errorCatcher(error) {
-    const { message } = error.response.data;
+    const { message } = error.response.data.error;
     setError(message);
   }
 
   useEffect(() => {
     if (error !== null) {
-      toast(error);
+      toast.error(error);
       setError(null);
     }
   }, [error]);
