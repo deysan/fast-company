@@ -58,7 +58,13 @@ export const AuthProvider = ({ children }) => {
         returnSecureToken: true
       });
       setTokens(data);
-      await createUser({ _id: data.localId, email, ...rest });
+      await createUser({
+        _id: data.localId,
+        email,
+        rate: randomInt(1, 5),
+        completedMeetings: randomInt(0, 200),
+        ...rest
+      });
     } catch (error) {
       errorCatcher(error);
       const { code, message } = error.response.data.error;
@@ -86,6 +92,10 @@ export const AuthProvider = ({ children }) => {
   function errorCatcher(error) {
     const { message } = error.response.data.error;
     setError(message);
+  }
+
+  function randomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
   }
 
   useEffect(() => {
