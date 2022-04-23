@@ -2,7 +2,9 @@ import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import userService from '../services/user.service';
-import { setTokens } from '../services/localStorage.service';
+import localStorageService, {
+  setTokens
+} from '../services/localStorage.service';
 import { toast } from 'react-toastify';
 
 const httpAuth = axios.create({
@@ -18,7 +20,7 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-  const [currentUser, setUser] = useState({});
+  const [currentUser, setCurrentUser] = useState({});
   const [error, setError] = useState(null);
 
   async function logIn({ email, password }) {
@@ -29,6 +31,7 @@ export const AuthProvider = ({ children }) => {
         returnSecureToken: true
       });
       setTokens(data);
+      getUserData();
     } catch (error) {
       errorCatcher(error);
       const { code, message } = error.response.data.error;
@@ -82,8 +85,18 @@ export const AuthProvider = ({ children }) => {
 
   async function createUser(data) {
     try {
-      const { content } = userService.create(data);
-      setUser(content);
+      const { content } = await userService.create(data);
+      console.log(content);
+      setCurrentUser(content);
+    } catch (error) {
+      errorCatcher(error);
+    }
+  }
+
+  async function getUserData() {
+    try {
+      const { content } = await userService.getCurrentUser();
+      setCurrentUser(content);
     } catch (error) {
       errorCatcher(error);
     }
@@ -97,6 +110,12 @@ export const AuthProvider = ({ children }) => {
   function randomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
+
+  useEffect(() => {
+    if (localStorageService.getAccessToken()) {
+      getUserData();
+    }
+  }, []);
 
   useEffect(() => {
     if (error !== null) {
