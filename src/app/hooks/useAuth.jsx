@@ -6,6 +6,7 @@ import localStorageService, {
   setTokens
 } from '../services/localStorage.service';
 import { toast } from 'react-toastify';
+import Preloader from '../components/ui/preloader';
 
 export const httpAuth = axios.create({
   baseURL: 'https://identitytoolkit.googleapis.com/v1/',
@@ -22,6 +23,7 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState();
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   async function logIn({ email, password }) {
     try {
@@ -96,9 +98,12 @@ export const AuthProvider = ({ children }) => {
   async function getUserData() {
     try {
       const { content } = await userService.getCurrentUser();
+      setIsLoading(true);
       setCurrentUser(content);
     } catch (error) {
       errorCatcher(error);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -114,6 +119,8 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (localStorageService.getAccessToken()) {
       getUserData();
+    } else {
+      setIsLoading(false);
     }
   }, []);
 
@@ -126,7 +133,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={{ signUp, logIn, currentUser }}>
-      {children}
+      {!isLoading ? children : <Preloader />}
     </AuthContext.Provider>
   );
 };
