@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import FormComponent, { TextField, CheckBoxField } from '../common/form';
 import { useAuth } from '../../hooks/useAuth';
 import * as yup from 'yup';
 
 const LoginForm = () => {
+  const { location } = useHistory();
+
   const [data] = useState({
     email: '',
     password: '',
@@ -62,6 +65,7 @@ const LoginForm = () => {
       logIn={logIn}
       enterError={enterError}
       setEnterError={setEnterError}
+      historyLocation={location.state.from.pathname}
     >
       <TextField
         label="Электронная почта"
