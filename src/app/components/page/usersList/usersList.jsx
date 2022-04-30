@@ -30,11 +30,6 @@ const UsersList = () => {
   //   api.users.fetchAll().then((data) => setUsers(data));
   // }, []);
 
-  const handleDelete = (userId) => {
-    // setUsers((prevState) => prevState.filter((user) => user._id !== userId));
-    console.log(userId);
-  };
-
   const handleBookmark = (userId) => {
     const bookmarkUsers = [...users];
 
@@ -118,7 +113,6 @@ const UsersList = () => {
               <>
                 <UsersTable
                   users={userCrop}
-                  onDelete={handleDelete}
                   onBookmark={handleBookmark}
                   selectedSort={sortBy}
                   onSort={handleSort}
