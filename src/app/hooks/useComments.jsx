@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuth } from './useAuth';
+import { nanoid } from 'nanoid';
 import PropTypes from 'prop-types';
 
 const CommentsContext = React.createContext();
@@ -17,6 +18,7 @@ export const CommentsProvider = ({ children }) => {
   async function createComment(data) {
     const comment = {
       ...data,
+      _id: nanoid(),
       pageId: userId,
       created_at: Date.now(),
       userId: currentUser._id
