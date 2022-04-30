@@ -1,20 +1,24 @@
 import { Link, useHistory, useLocation } from 'react-router-dom';
-import React, { useEffect, useState } from 'react';
-import api from '../../../api';
+import React from 'react';
+// import api from '../../../api';
 import UserCard from '../../ui/userCard';
 import MeetingsCard from '../../ui/meetingsCard';
 import QualitiesCard from '../../ui/qualitiesCard';
 import Comments from '../../ui/comments';
 import PropTypes from 'prop-types';
+import { useUser } from '../../../hooks/useUsers';
 
 const UserPage = ({ userId }) => {
-  const [user, setUser] = useState();
   const history = useHistory();
+  const { getUserById } = useUser();
+  // const [user, setUser] = useState();
   const { pathname } = useLocation();
 
-  useEffect(() => {
-    api.users.getById(userId).then((data) => setUser(data));
-  }, []);
+  const user = getUserById(userId);
+
+  // useEffect(() => {
+  //   api.users.getById(userId).then((data) => setUser(data));
+  // }, []);
 
   const handleClick = () => {
     history.push(`${pathname}/edit`);
