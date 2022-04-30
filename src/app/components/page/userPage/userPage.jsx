@@ -7,6 +7,7 @@ import QualitiesCard from '../../ui/qualitiesCard';
 import Comments from '../../ui/comments';
 import PropTypes from 'prop-types';
 import { useUser } from '../../../hooks/useUsers';
+import { CommentsProvider } from '../../../hooks/useComments';
 
 const UserPage = ({ userId }) => {
   const history = useHistory();
@@ -38,7 +39,9 @@ const UserPage = ({ userId }) => {
           </div>
 
           <div className="col-md-8">
-            <Comments />
+            <CommentsProvider>
+              <Comments />
+            </CommentsProvider>
           </div>
         </div>
       </div>
