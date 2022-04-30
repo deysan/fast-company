@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api from '../../../api';
+// import api from '../../../api';
 import paginate from '../../../utils/paginate';
 import Status from '../../ui/status';
 import Pagination from '../../common/pagination';
@@ -9,11 +9,12 @@ import UsersTable from '../../ui/usersTable';
 import Search from '../../common/search';
 import _ from 'lodash';
 import { useUser } from '../../../hooks/useUsers';
+import { useProfessions } from '../../../hooks/useProfession';
 
 const UsersList = () => {
   // const [users, setUsers] = useState();
   const { users } = useUser();
-  const [professions, setProfessions] = useState();
+  const { professions, isLoading: professionsLoading } = useProfessions();
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedFilter, setSelectedFilter] = useState();
   const [sortBy, setSortBy] = useState({
@@ -28,10 +29,6 @@ const UsersList = () => {
   // useEffect(() => {
   //   api.users.fetchAll().then((data) => setUsers(data));
   // }, []);
-
-  useEffect(() => {
-    api.professions.fetchAll().then((data) => setProfessions(data));
-  }, []);
 
   const handleDelete = (userId) => {
     // setUsers((prevState) => prevState.filter((user) => user._id !== userId));
@@ -79,7 +76,7 @@ const UsersList = () => {
     setCurrentPage(1);
   }, [selectedFilter, searchValue]);
 
-  if (users && professions) {
+  if (users && professions && !professionsLoading) {
     const filteredUsers = selectedFilter
       ? users.filter(
           (user) =>
