@@ -4,21 +4,23 @@ import api from '../../api';
 import CommentForm from '../common/comments/commentForm';
 import CommentsList from '../common/comments/commentsList';
 import { orderBy } from 'lodash';
+import { useComments } from '../../hooks/useComments';
 
 const Comments = () => {
   const { userId } = useParams();
-  const [users, setUsers] = useState();
   const [comments, setComments] = useState();
 
+  const { createComment } = useComments();
+
   useEffect(() => {
-    api.users.fetchAll().then((data) => setUsers(data));
     api.comments.fetchCommentsForUser(userId).then((data) => setComments(data));
   }, []);
 
   const handleSubmit = (data) => {
-    api.comments
-      .add({ ...data, pageId: userId })
-      .then((newComment) => setComments([...comments, newComment]));
+    createComment(data);
+    // api.comments
+    //   .add({ ...data, pageId: userId })
+    //   .then((newComment) => setComments([...comments, newComment]));
   };
 
   const handleDeleteComment = (commentId) => {
@@ -28,9 +30,10 @@ const Comments = () => {
   };
 
   const sortedComments = orderBy(comments, ['created_at'], ['desc']);
+
   return (
     <>
-      <CommentForm users={users} onSubmit={handleSubmit} />
+      <CommentForm onSubmit={handleSubmit} />
       {sortedComments.length > 0 && (
         <CommentsList
           comments={sortedComments}
