@@ -10,6 +10,7 @@ import { ProfessionProvider } from './hooks/useProfession';
 import { QualitiesProvider } from './hooks/useQualities';
 import { AuthProvider } from './hooks/useAuth';
 import ProtectedRoute from './components/common/protectedRoute';
+import LogOut from './layouts/logOut';
 
 function App() {
   const { pathname } = useLocation();
@@ -23,6 +24,7 @@ function App() {
               <Redirect from="/:url*(/+)" to={pathname.slice(0, -1)} />
               <ProtectedRoute path="/users/:userId?/:edit?" component={Users} />
               <Route path="/login/:type?" component={Login} />
+              <Route path="/logout" component={LogOut} />
               <Route exact path="/" component={Main} />
               <Route path="/404" component={NotFound} />
               <Redirect to="/404" />

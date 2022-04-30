@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import userService from '../services/user.service';
@@ -21,6 +22,8 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
+  const history = useHistory();
+
   const [currentUser, setCurrentUser] = useState();
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -53,6 +56,12 @@ export const AuthProvider = ({ children }) => {
         }
       }
     }
+  }
+
+  function logOut() {
+    localStorageService.removeAuthData();
+    setCurrentUser(null);
+    history.push('/');
   }
 
   async function signUp({ email, password, ...rest }) {
@@ -132,7 +141,7 @@ export const AuthProvider = ({ children }) => {
   }, [error]);
 
   return (
-    <AuthContext.Provider value={{ signUp, logIn, currentUser }}>
+    <AuthContext.Provider value={{ signUp, logIn, logOut, currentUser }}>
       {!isLoading ? children : <Preloader />}
     </AuthContext.Provider>
   );

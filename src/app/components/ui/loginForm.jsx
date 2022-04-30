@@ -65,7 +65,7 @@ const LoginForm = () => {
       logIn={logIn}
       enterError={enterError}
       setEnterError={setEnterError}
-      historyLocation={location.state.from.pathname}
+      historyLocation={location.state?.from.pathname}
     >
       <TextField
         label="Электронная почта"
