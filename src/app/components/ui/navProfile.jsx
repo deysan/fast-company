@@ -19,9 +19,7 @@ const NavProfile = ({ currentUser }) => {
         aria-expanded="false"
       >
         <img
-          src={`https://avatars.dicebear.com/api/avataaars/${(Math.random() + 1)
-            .toString(36)
-            .substring(7)}.svg`}
+          src={currentUser.image}
           className="rounded-circle me-2"
           alt="avatar"
           width="20"
