@@ -3,6 +3,7 @@ import Preloader from '../../ui/preloader';
 import { displayDate } from '../../../utils/displayDate';
 import PropTypes from 'prop-types';
 import { useUser } from '../../../hooks/useUsers';
+import { useAuth } from '../../../hooks/useAuth';
 
 const CommentItem = ({
   userId,
@@ -11,6 +12,7 @@ const CommentItem = ({
   content,
   onDelete
 }) => {
+  const { currentUser } = useAuth();
   const { getUserById } = useUser();
   const user = getUserById(userId);
 
@@ -34,12 +36,14 @@ const CommentItem = ({
                       {user.name}
                       <span className="small"> - {displayDate(created)}</span>
                     </p>
-                    <button
-                      className="btn btn-sm text-primary d-flex align-items-center"
-                      onClick={() => onDelete(commentId)}
-                    >
-                      <i className="bi bi-x-lg"></i>
-                    </button>
+                    {userId === currentUser._id && (
+                      <button
+                        className="btn btn-sm text-primary d-flex align-items-center"
+                        onClick={() => onDelete(commentId)}
+                      >
+                        <i className="bi bi-x-lg"></i>
+                      </button>
+                    )}
                   </div>
                   <p className="small mb-0">{content}</p>
                 </div>
