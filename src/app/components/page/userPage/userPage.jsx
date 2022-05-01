@@ -12,14 +12,9 @@ import { CommentsProvider } from '../../../hooks/useComments';
 const UserPage = ({ userId }) => {
   const history = useHistory();
   const { getUserById } = useUser();
-  // const [user, setUser] = useState();
   const { pathname } = useLocation();
 
   const user = getUserById(userId);
-
-  // useEffect(() => {
-  //   api.users.getById(userId).then((data) => setUser(data));
-  // }, []);
 
   const handleClick = () => {
     history.push(`${pathname}/edit`);

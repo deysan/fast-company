@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import api from '../../../api';
+import React from 'react';
 import Preloader from '../../ui/preloader';
 import { displayDate } from '../../../utils/displayDate';
 import PropTypes from 'prop-types';
+import { useUser } from '../../../hooks/useUsers';
 
 const CommentItem = ({
   userId,
@@ -11,11 +11,8 @@ const CommentItem = ({
   content,
   onDelete
 }) => {
-  const [user, setUser] = useState();
-
-  useEffect(() => {
-    api.users.getById(userId).then((data) => setUser(data));
-  }, []);
+  const { getUserById } = useUser();
+  const user = getUserById(userId);
 
   if (user) {
     return (
@@ -24,11 +21,7 @@ const CommentItem = ({
           <div className="col">
             <div className="d-flex flex-start">
               <img
-                src={`https://avatars.dicebear.com/api/avataaars/${(
-                  Math.random() + 1
-                )
-                  .toString(36)
-                  .substring(7)}.svg`}
+                src={user.image}
                 className="rounded-circle shadow-1-strong me-3"
                 alt="avatar"
                 width="65"
