@@ -38,14 +38,24 @@ export const CommentsProvider = ({ children }) => {
     console.log(comment);
   }
 
+  async function getComments() {
+    try {
+      const { content } = await commentService.getComments(userId);
+      setComments(content);
+    } catch (error) {
+      errorCatcher(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   function errorCatcher(error) {
     const { message } = error.response.data;
     setError(message);
   }
 
   useEffect(() => {
-    setComments(null);
-    setLoading(false);
+    getComments();
   }, []);
 
   useEffect(() => {
