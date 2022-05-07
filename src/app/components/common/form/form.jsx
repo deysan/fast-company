@@ -76,7 +76,7 @@ const FormComponent = ({
       console.log(newData);
 
       try {
-        await signUp(data);
+        await signUp(newData);
         history.push('/');
       } catch (error) {
         setErrors(error);

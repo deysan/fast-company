@@ -37,51 +37,63 @@ const UserEdit = ({ userId }) => {
 
   const validate = () => {
     validateSchema
-      .validate(user)
+      .validate(data)
       .then(() => setErrors({}))
       .catch((error) => setErrors({ [error.path]: error.message }));
     return Object.keys(errors).length === 0;
   };
 
-  const handleSave = () => {
-    // api.users.update(userId, user);
-    // history.replace(`/users/${userId}`);
+  const handleSave = async () => {
+    await updateUserData({
+      ...data,
+      qualities: data.qualities.map((q) => q.value)
+    });
+
+    history.replace(`/users/${userId}`);
   };
 
   const handleChange = (target) => {
-    if (target.name === 'profession') {
-      const professionName = professions.find((profession) =>
-        Object.values(profession).includes(target.value)
-      ).name;
-
-      setData((prevState) => ({
-        ...prevState,
-        [target.name]: { _id: target.value, name: professionName }
-      }));
-    } else if (target.name === 'qualities') {
-      const { value } = target;
-      const qualitieValue = Object.values(value).map(
-        (qualitie) => qualitie.value
-      );
-      const qualitieObject = Object.values(qualities).filter((qualitie) =>
-        qualitieValue.includes(qualitie._id)
-      );
-
-      setData((prevState) => ({ ...prevState, [target.name]: qualitieObject }));
-    } else {
-      setData((prevState) => ({ ...prevState, [target.name]: target.value }));
-    }
+    setData((prevState) => ({
+      ...prevState,
+      [target.name]: target.value
+    }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     validate();
-    console.log(user);
+    console.log(data);
   };
+
+  const transformData = (data) => {
+    const result = getQualitiesListByIds(data).map((qual) => ({
+      label: qual.name,
+      value: qual._id
+    }));
+    return result;
+  };
+
+  function getQualitiesListByIds(qualitiesIds) {
+    const qualitiesArray = [];
+    for (const qualId of qualitiesIds) {
+      for (const quality of qualities) {
+        if (quality._id === qualId) {
+          qualitiesArray.push(quality);
+          break;
+        }
+      }
+    }
+    return qualitiesArray;
+  }
+
+  console.log(data);
 
   useEffect(() => {
     if (!professionLoading && !qualitiesLoading && currentUser && !data) {
-      setData(currentUser);
+      setData({
+        ...currentUser,
+        qualities: transformData(currentUser.qualities)
+      });
     }
   }, [professionLoading, qualitiesLoading, currentUser, data]);
 
