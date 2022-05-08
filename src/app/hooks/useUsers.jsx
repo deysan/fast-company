@@ -3,6 +3,7 @@ import userService from '../services/user.service';
 import Preloader from '../components/ui/preloader';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
+import { useAuth } from './useAuth';
 
 const UserContext = React.createContext();
 
@@ -11,6 +12,7 @@ export const useUser = () => {
 };
 
 const UserProvider = ({ children }) => {
+  const { currentUser } = useAuth();
   const [users, setUsers] = useState([]);
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -44,6 +46,15 @@ const UserProvider = ({ children }) => {
     const { message } = error.response.data;
     setError(message);
   }
+
+  useEffect(() => {
+    if (!isLoading) {
+      const newUsers = [...users];
+      const indexUser = newUsers.findIndex((u) => u._id === currentUser._id);
+      newUsers[indexUser] = currentUser;
+      setUsers(newUsers);
+    }
+  }, [currentUser]);
 
   return (
     <UserContext.Provider value={{ users, getUserById }}>

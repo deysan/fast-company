@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useLocation, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 
 const NavProfile = ({ currentUser }) => {
+  const { pathname } = useLocation();
+
   const [isOpen, setIsOpen] = useState();
 
   const toggleMenu = () => {
@@ -29,7 +31,14 @@ const NavProfile = ({ currentUser }) => {
       </a>
       <ul className={`dropdown-menu${isOpen ? ' show' : ''}`}>
         <li>
-          <Link className="dropdown-item" to={`users/${currentUser._id}`}>
+          <Link
+            className="dropdown-item"
+            to={
+              pathname.includes('users')
+                ? `${currentUser._id}`
+                : `users/${currentUser._id}`
+            }
+          >
             Profile
           </Link>
         </li>
