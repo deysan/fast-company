@@ -62,7 +62,6 @@ const UserEdit = ({ userId }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     validate();
-    console.log(data);
   };
 
   const transformData = (data) => {
@@ -85,8 +84,6 @@ const UserEdit = ({ userId }) => {
     }
     return qualitiesArray;
   }
-
-  console.log(data);
 
   useEffect(() => {
     if (!professionLoading && !qualitiesLoading && currentUser && !data) {

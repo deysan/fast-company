@@ -57,8 +57,6 @@ const FormComponent = ({
     if (!isValid || enterError) return;
 
     if (logIn) {
-      console.log(data);
-
       try {
         await logIn(data);
         history.push(historyLocation || '/users');
