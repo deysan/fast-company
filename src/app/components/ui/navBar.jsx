@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
+import NavProfile from './navProfile';
 
 const NavBar = () => {
   const { pathname } = useLocation();
+  const { currentUser } = useAuth();
 
   const defaultClasses = {
     main: 'nav-link',
@@ -25,22 +28,29 @@ const NavBar = () => {
 
   return (
     <div className="container">
-      <ul className="nav nav-tabs">
-        <li className="nav-item">
-          <Link className={classes.main} to="/">
-            Main
-          </Link>
-        </li>
-        <li className="nav-item">
+      <ul className="nav nav-tabs d-flex justify-content-between">
+        <div className="d-flex">
+          <li className="nav-item">
+            <Link className={classes.main} to="/">
+              Main
+            </Link>
+          </li>
+          {currentUser && (
+            <li className="nav-item">
+              <Link className={classes.users} to="/users">
+                Users
+              </Link>
+            </li>
+          )}
+        </div>
+
+        {currentUser ? (
+          <NavProfile currentUser={currentUser} />
+        ) : (
           <Link className={classes.login} to="/login">
             Login
           </Link>
-        </li>
-        <li className="nav-item">
-          <Link className={classes.users} to="/users">
-            Users
-          </Link>
-        </li>
+        )}
       </ul>
     </div>
   );

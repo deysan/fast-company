@@ -8,15 +8,13 @@ const Qualities = ({ qualities }) => {
 
   if (isLoading) return <Preloader />;
 
-  return qualities.map((qualitie) => {
-    const quality = getQuality(qualitie);
+  return qualities.map((quality) => {
+    const { color, name } = getQuality(quality);
 
     return (
-      quality && (
-        <span key={quality._id} className={`badge me-1 bg-${quality.color}`}>
-          {quality.name}
-        </span>
-      )
+      <span key={quality} className={`badge me-1 bg-${color}`}>
+        {name}
+      </span>
     );
   });
 };

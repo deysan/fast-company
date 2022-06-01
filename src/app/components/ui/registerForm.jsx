@@ -16,6 +16,7 @@ const RegisterForm = () => {
     password: '',
     profession: '',
     sex: 'male',
+    name: '',
     qualities: [],
     license: false
   });
@@ -35,6 +36,15 @@ const RegisterForm = () => {
       },
       isEmail: {
         message: 'Email введен некорректно'
+      }
+    },
+    name: {
+      isRequired: {
+        message: 'Имя обязательно для заполнения'
+      },
+      minLengthPassword: {
+        message: 'Имя должно состоять минимум из 3 символов',
+        value: 3
       }
     },
     password: {
@@ -77,6 +87,7 @@ const RegisterForm = () => {
         name="email"
         autoFocus
       />
+      <TextField label="Имя" name="name" />
       <TextField label="Пароль" type="password" name="password" />
       <SelectField
         label="Выберите вашу профессию"

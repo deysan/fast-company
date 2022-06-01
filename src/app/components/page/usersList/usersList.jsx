@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api from '../../../api';
+// import api from '../../../api';
 import paginate from '../../../utils/paginate';
 import Status from '../../ui/status';
 import Pagination from '../../common/pagination';
@@ -9,11 +9,14 @@ import UsersTable from '../../ui/usersTable';
 import Search from '../../common/search';
 import _ from 'lodash';
 import { useUser } from '../../../hooks/useUsers';
+import { useProfessions } from '../../../hooks/useProfession';
+import { useAuth } from '../../../hooks/useAuth';
 
 const UsersList = () => {
   // const [users, setUsers] = useState();
   const { users } = useUser();
-  const [professions, setProfessions] = useState();
+  const { currentUser } = useAuth();
+  const { professions, isLoading: professionsLoading } = useProfessions();
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedFilter, setSelectedFilter] = useState();
   const [sortBy, setSortBy] = useState({
@@ -28,15 +31,6 @@ const UsersList = () => {
   // useEffect(() => {
   //   api.users.fetchAll().then((data) => setUsers(data));
   // }, []);
-
-  useEffect(() => {
-    api.professions.fetchAll().then((data) => setProfessions(data));
-  }, []);
-
-  const handleDelete = (userId) => {
-    // setUsers((prevState) => prevState.filter((user) => user._id !== userId));
-    console.log(userId);
-  };
 
   const handleBookmark = (userId) => {
     const bookmarkUsers = [...users];
@@ -79,17 +73,23 @@ const UsersList = () => {
     setCurrentPage(1);
   }, [selectedFilter, searchValue]);
 
-  if (users && professions) {
-    const filteredUsers = selectedFilter
-      ? users.filter(
-          (user) =>
-            JSON.stringify(user.profession) === JSON.stringify(selectedFilter)
-        )
-      : searchValue
-      ? users.filter((user) =>
-          user.name.toLowerCase().includes(searchValue.toLowerCase())
-        )
-      : users;
+  if (users && professions && !professionsLoading) {
+    function filterUsers(data) {
+      const filteredUsers = selectedFilter
+        ? data.filter(
+            (user) =>
+              JSON.stringify(user.profession) === JSON.stringify(selectedFilter)
+          )
+        : searchValue
+        ? data.filter((user) =>
+            user.name.toLowerCase().includes(searchValue.toLowerCase())
+          )
+        : data;
+
+      return filteredUsers.filter((user) => user._id !== currentUser._id);
+    }
+
+    const filteredUsers = filterUsers(users);
 
     const count = filteredUsers.length;
     const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
@@ -121,7 +121,6 @@ const UsersList = () => {
               <>
                 <UsersTable
                   users={userCrop}
-                  onDelete={handleDelete}
                   onBookmark={handleBookmark}
                   selectedSort={sortBy}
                   onSort={handleSort}

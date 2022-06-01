@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
-import SelectField from '../form/selectField';
 import { validator } from '../../../utils/validator';
 import PropTypes from 'prop-types';
 import TextAreaField from '../form/textAreaField';
 
-const initialData = { userId: '', content: '' };
-
-const CommentForm = ({ users, onSubmit }) => {
-  const [data, setData] = useState(initialData);
+const CommentForm = ({ onSubmit }) => {
+  const [data, setData] = useState({});
   const [errors, setErrors] = useState({});
 
   const handleChange = (target) => {
@@ -15,11 +12,6 @@ const CommentForm = ({ users, onSubmit }) => {
   };
 
   const validatorConfig = {
-    userId: {
-      isRequired: {
-        message: 'Выберите от чьего имени вы хотите отправить сообщение'
-      }
-    },
     content: {
       isRequired: {
         message: 'Сообщение не может быть пустым'
@@ -34,7 +26,7 @@ const CommentForm = ({ users, onSubmit }) => {
   };
 
   const clearForm = () => {
-    setData(initialData);
+    setData({});
   };
 
   const handleSubmit = (e) => {
@@ -51,18 +43,10 @@ const CommentForm = ({ users, onSubmit }) => {
         <div>
           <h2>New comment</h2>
           <form onSubmit={handleSubmit}>
-            <SelectField
-              name="userId"
-              value={data.userId}
-              options={users}
-              defaultOption="Выберите пользователя"
-              onChange={handleChange}
-              error={errors.userId}
-            />
             <TextAreaField
               label="Сообщение"
               name="content"
-              value={data.content}
+              value={data.content || ''}
               onChange={handleChange}
               error={errors.content}
             />
@@ -77,7 +61,6 @@ const CommentForm = ({ users, onSubmit }) => {
 };
 
 CommentForm.propTypes = {
-  users: PropTypes.array,
   onSubmit: PropTypes.func
 };
 

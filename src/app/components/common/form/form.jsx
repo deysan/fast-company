@@ -11,7 +11,8 @@ const FormComponent = ({
   signUp,
   logIn,
   enterError,
-  setEnterError
+  setEnterError,
+  historyLocation
 }) => {
   const history = useHistory();
 
@@ -56,11 +57,9 @@ const FormComponent = ({
     if (!isValid || enterError) return;
 
     if (logIn) {
-      console.log(data);
-
       try {
         await logIn(data);
-        history.push('/users');
+        history.push(historyLocation || '/users');
       } catch (error) {
         setEnterError(error.message);
       }
@@ -75,7 +74,7 @@ const FormComponent = ({
       console.log(newData);
 
       try {
-        await signUp(data);
+        await signUp(newData);
         history.push('/');
       } catch (error) {
         setErrors(error);
@@ -140,7 +139,8 @@ FormComponent.propTypes = {
   signUp: PropTypes.func,
   logIn: PropTypes.func,
   enterError: PropTypes.string,
-  setEnterError: PropTypes.func
+  setEnterError: PropTypes.func,
+  historyLocation: PropTypes.string
 };
 
 export default FormComponent;
