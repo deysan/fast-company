@@ -10,13 +10,20 @@ import {
 } from '../../common/form';
 import BackHistoryButton from '../../common/backButton';
 import { useAuth } from '../../../hooks/useAuth';
-import { useQualities } from '../../../hooks/useQualities';
+// import { useQualities } from '../../../hooks/useQualities';
 import { useProfessions } from '../../../hooks/useProfession';
+import { useSelector } from 'react-redux';
+import {
+  getQualities,
+  getQualitiesLoadingStatus
+} from '../../../store/qualities';
 
 const UserEdit = ({ userId }) => {
   const history = useHistory();
   const { currentUser, updateUserData } = useAuth();
-  const { qualities, isLoading: qualitiesLoading } = useQualities();
+  // const { qualities, isLoading: qualitiesLoading } = useQualities();
+  const qualities = useSelector(getQualities());
+  const qualitiesLoading = useSelector(getQualitiesLoadingStatus());
   const { professions, isLoading: professionLoading } = useProfessions();
 
   const [data, setData] = useState();

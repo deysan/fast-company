@@ -7,8 +7,9 @@ import FormComponent, {
   MultiSelectField
 } from '../common/form';
 import { useProfessions } from '../../hooks/useProfession';
-import { useQualities } from '../../hooks/useQualities';
 import { useAuth } from '../../hooks/useAuth';
+import { useSelector } from 'react-redux';
+import { getQualities } from '../../store/qualities';
 
 const RegisterForm = () => {
   const [data] = useState({
@@ -21,7 +22,7 @@ const RegisterForm = () => {
     license: false
   });
   const { professions } = useProfessions();
-  const { qualities } = useQualities();
+  const qualities = useSelector(getQualities());
   const { signUp } = useAuth();
 
   const qualitiesList = qualities.map((quality) => ({
