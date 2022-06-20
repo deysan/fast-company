@@ -1,15 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Preloader from './preloader';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   getQualitiesByIds,
-  getQualitiesLoadingStatus
+  getQualitiesLoadingStatus,
+  loadQualitiesList
 } from '../../store/qualities';
 
 const Qualities = ({ qualities }) => {
+  const dispatch = useDispatch();
   const qualitiesList = useSelector(getQualitiesByIds(qualities));
   const qualitiesLoading = useSelector(getQualitiesLoadingStatus());
+
+  useEffect(() => {
+    dispatch(loadQualitiesList());
+  }, []);
 
   if (qualitiesLoading) return <Preloader />;
 
