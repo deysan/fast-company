@@ -6,10 +6,10 @@ import FormComponent, {
   SelectField,
   MultiSelectField
 } from '../common/form';
-import { useProfessions } from '../../hooks/useProfession';
 import { useAuth } from '../../hooks/useAuth';
 import { useSelector } from 'react-redux';
 import { getQualities } from '../../store/qualities';
+import { getProfessions } from '../../store/professions';
 
 const RegisterForm = () => {
   const [data] = useState({
@@ -21,9 +21,9 @@ const RegisterForm = () => {
     qualities: [],
     license: false
   });
-  const { professions } = useProfessions();
-  const qualities = useSelector(getQualities());
   const { signUp } = useAuth();
+  const qualities = useSelector(getQualities());
+  const professions = useSelector(getProfessions());
 
   const qualitiesList = qualities.map((quality) => ({
     label: quality.name,

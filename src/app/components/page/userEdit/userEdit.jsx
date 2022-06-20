@@ -11,12 +11,16 @@ import {
 import BackHistoryButton from '../../common/backButton';
 import { useAuth } from '../../../hooks/useAuth';
 // import { useQualities } from '../../../hooks/useQualities';
-import { useProfessions } from '../../../hooks/useProfession';
+// import { useProfessions } from '../../../hooks/useProfession';
 import { useSelector } from 'react-redux';
 import {
   getQualities,
   getQualitiesLoadingStatus
 } from '../../../store/qualities';
+import {
+  getProfessions,
+  getProfessionsLoadingStatus
+} from '../../../store/professions';
 
 const UserEdit = ({ userId }) => {
   const history = useHistory();
@@ -24,7 +28,9 @@ const UserEdit = ({ userId }) => {
   // const { qualities, isLoading: qualitiesLoading } = useQualities();
   const qualities = useSelector(getQualities());
   const qualitiesLoading = useSelector(getQualitiesLoadingStatus());
-  const { professions, isLoading: professionLoading } = useProfessions();
+  // const { professions, isLoading: professionsLoading } = useProfessions();
+  const professions = useSelector(getProfessions());
+  const professionsLoading = useSelector(getProfessionsLoadingStatus());
 
   const [data, setData] = useState();
   const [errors, setErrors] = useState({});
@@ -93,13 +99,13 @@ const UserEdit = ({ userId }) => {
   }
 
   useEffect(() => {
-    if (!professionLoading && !qualitiesLoading && currentUser && !data) {
+    if (!professionsLoading && !qualitiesLoading && currentUser && !data) {
       setData({
         ...currentUser,
         qualities: transformData(currentUser.qualities)
       });
     }
-  }, [professionLoading, qualitiesLoading, currentUser, data]);
+  }, [professionsLoading, qualitiesLoading, currentUser, data]);
 
   useEffect(() => {
     if (data && isLoading) {

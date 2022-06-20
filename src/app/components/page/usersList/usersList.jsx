@@ -9,14 +9,19 @@ import UsersTable from '../../ui/usersTable';
 import Search from '../../common/search';
 import _ from 'lodash';
 import { useUser } from '../../../hooks/useUsers';
-import { useProfessions } from '../../../hooks/useProfession';
 import { useAuth } from '../../../hooks/useAuth';
+import { useSelector } from 'react-redux';
+import {
+  getProfessions,
+  getProfessionsLoadingStatus
+} from '../../../store/professions';
 
 const UsersList = () => {
   // const [users, setUsers] = useState();
   const { users } = useUser();
   const { currentUser } = useAuth();
-  const { professions, isLoading: professionsLoading } = useProfessions();
+  const professions = useSelector(getProfessions());
+  const professionsLoading = useSelector(getProfessionsLoadingStatus());
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedFilter, setSelectedFilter] = useState();
   const [sortBy, setSortBy] = useState({
