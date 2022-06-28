@@ -8,17 +8,16 @@ import Preloader from '../../ui/preloader';
 import UsersTable from '../../ui/usersTable';
 import Search from '../../common/search';
 import _ from 'lodash';
-import { useUser } from '../../../hooks/useUsers';
 import { useAuth } from '../../../hooks/useAuth';
 import { useSelector } from 'react-redux';
 import {
   getProfessions,
   getProfessionsLoadingStatus
 } from '../../../store/professions';
+import { getUsersList } from '../../../store/users';
 
 const UsersList = () => {
   // const [users, setUsers] = useState();
-  const { users } = useUser();
   const { currentUser } = useAuth();
   const professions = useSelector(getProfessions());
   const professionsLoading = useSelector(getProfessionsLoadingStatus());
@@ -30,6 +29,8 @@ const UsersList = () => {
     icon: 'up'
   });
   const [searchValue, setSearchValue] = useState('');
+
+  const users = useSelector(getUsersList());
 
   const pageSize = 4;
 
