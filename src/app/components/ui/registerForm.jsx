@@ -25,7 +25,7 @@ const RegisterForm = () => {
   const qualities = useSelector(getQualities());
   const professions = useSelector(getProfessions());
 
-  const qualitiesList = qualities.map((quality) => ({
+  const qualitiesList = qualities?.map((quality) => ({
     label: quality.name,
     value: quality._id
   }));

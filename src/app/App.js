@@ -14,6 +14,7 @@ import LogOut from './layouts/logOut';
 import { useDispatch } from 'react-redux';
 import { loadQualitiesList } from './store/qualities';
 import { loadProfessionsList } from './store/professions';
+import { loadUsersList } from './store/users';
 
 function App() {
   const { pathname } = useLocation();
@@ -22,6 +23,7 @@ function App() {
   useEffect(() => {
     dispatch(loadQualitiesList());
     dispatch(loadProfessionsList());
+    dispatch(loadUsersList());
   }, []);
 
   return (
