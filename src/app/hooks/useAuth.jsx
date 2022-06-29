@@ -8,6 +8,7 @@ import localStorageService, {
 } from '../services/localStorage.service';
 import { toast } from 'react-toastify';
 import Preloader from '../components/ui/preloader';
+import { getRandomInt } from '../utils/getRandomInt';
 
 export const httpAuth = axios.create({
   baseURL: 'https://identitytoolkit.googleapis.com/v1/',
@@ -75,8 +76,8 @@ export const AuthProvider = ({ children }) => {
       await createUser({
         _id: data.localId,
         email,
-        rate: randomInt(1, 5),
-        completedMeetings: randomInt(0, 200),
+        rate: getRandomInt(1, 5),
+        completedMeetings: getRandomInt(0, 200),
         image: `https://avatars.dicebear.com/api/avataaars/${(Math.random() + 1)
           .toString(36)
           .substring(7)}.svg`,
@@ -130,10 +131,6 @@ export const AuthProvider = ({ children }) => {
   function errorCatcher(error) {
     const { message } = error.response.data.error;
     setError(message);
-  }
-
-  function randomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
   }
 
   useEffect(() => {
