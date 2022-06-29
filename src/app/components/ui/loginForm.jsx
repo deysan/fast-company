@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import FormComponent, { TextField, CheckBoxField } from '../common/form';
-import { useAuth } from '../../hooks/useAuth';
+// import { useAuth } from '../../hooks/useAuth';
 import * as yup from 'yup';
+import { logIn } from '../../store/users';
 
 const LoginForm = () => {
   const { location } = useHistory();
@@ -14,7 +15,7 @@ const LoginForm = () => {
   });
   const [enterError, setEnterError] = useState(null);
 
-  const { logIn } = useAuth();
+  // const { logIn } = useAuth();
 
   const validateSchema = yup.object().shape({
     password: yup.string().required('Пароль обязателен для заполнения'),

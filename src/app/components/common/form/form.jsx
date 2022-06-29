@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { validator } from '../../../utils/validator';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
 const FormComponent = ({
@@ -15,7 +14,6 @@ const FormComponent = ({
   setEnterError,
   historyLocation
 }) => {
-  const history = useHistory();
   const dispatch = useDispatch();
 
   const [data, setData] = useState(defaultData || {});
@@ -53,18 +51,14 @@ const FormComponent = ({
     [validatorConfig, validateSchema, errors]
   );
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     const isValid = validate(data);
     if (!isValid || enterError) return;
 
     if (logIn) {
-      try {
-        await logIn(data);
-        history.push(historyLocation || '/users');
-      } catch (error) {
-        setEnterError(error.message);
-      }
+      const redirect = historyLocation || '/users';
+      dispatch(logIn(data, redirect));
     }
 
     if (signUp) {
