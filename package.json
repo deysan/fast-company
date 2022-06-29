@@ -10,6 +10,7 @@
     "axios": "^0.26.0",
     "bootstrap": "^5.1.0",
     "bootstrap-icons": "^1.7.2",
+    "history": "^4.9.0",
     "lodash": "^4.17.15",
     "luxon": "^2.3.0",
     "nanoid": "^3.3.3",
