@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { validator } from '../../../utils/validator';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 const FormComponent = ({
   defaultData,
@@ -15,6 +16,7 @@ const FormComponent = ({
   historyLocation
 }) => {
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const [data, setData] = useState(defaultData || {});
   const [errors, setErrors] = useState({});
@@ -72,13 +74,7 @@ const FormComponent = ({
       };
 
       console.log(newData);
-
-      try {
-        await signUp(newData);
-        history.push('/');
-      } catch (error) {
-        setErrors(error);
-      }
+      dispatch(signUp(newData));
     }
   };
 

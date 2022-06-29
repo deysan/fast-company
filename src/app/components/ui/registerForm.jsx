@@ -6,10 +6,11 @@ import FormComponent, {
   SelectField,
   MultiSelectField
 } from '../common/form';
-import { useAuth } from '../../hooks/useAuth';
+// import { useAuth } from '../../hooks/useAuth';
 import { useSelector } from 'react-redux';
 import { getQualities } from '../../store/qualities';
 import { getProfessions } from '../../store/professions';
+import { signUp } from '../../store/users';
 
 const RegisterForm = () => {
   const [data] = useState({
@@ -21,7 +22,7 @@ const RegisterForm = () => {
     qualities: [],
     license: false
   });
-  const { signUp } = useAuth();
+  // const { signUp } = useAuth();
   const qualities = useSelector(getQualities());
   const professions = useSelector(getProfessions());
 
