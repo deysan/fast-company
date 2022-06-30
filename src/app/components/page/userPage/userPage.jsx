@@ -6,7 +6,7 @@ import QualitiesCard from '../../ui/qualitiesCard';
 import Comments from '../../ui/comments';
 import PropTypes from 'prop-types';
 // import { useUser } from '../../../hooks/useUsers';
-import { CommentsProvider } from '../../../hooks/useComments';
+// import { CommentsProvider } from '../../../hooks/useComments';
 import { useSelector } from 'react-redux';
 import { getUserById } from '../../../store/users';
 
@@ -37,9 +37,9 @@ const UserPage = ({ userId }) => {
           </div>
 
           <div className="col-md-8">
-            <CommentsProvider>
+            {/* <CommentsProvider> */}
               <Comments />
-            </CommentsProvider>
+            {/* </CommentsProvider> */}
           </div>
         </div>
       </div>
