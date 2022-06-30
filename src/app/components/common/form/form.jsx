@@ -58,7 +58,7 @@ const FormComponent = ({
 
     if (logIn) {
       const redirect = historyLocation || '/users';
-      dispatch(logIn(data, redirect));
+      dispatch(logIn({ payload: data, redirect }));
     }
 
     if (signUp) {
