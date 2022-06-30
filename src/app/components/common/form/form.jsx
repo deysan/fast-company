@@ -10,8 +10,6 @@ const FormComponent = ({
   validateSchema,
   signUp,
   logIn,
-  enterError,
-  setEnterError,
   historyLocation
 }) => {
   const dispatch = useDispatch();
@@ -21,7 +19,6 @@ const FormComponent = ({
 
   const handleChange = useCallback((target) => {
     setData((prevState) => ({ ...prevState, [target.name]: target.value }));
-    setEnterError && setEnterError(null);
   }, []);
 
   useEffect(() => {
@@ -44,9 +41,7 @@ const FormComponent = ({
           .catch((error) => setErrors({ [error.path]: error.message }));
       }
 
-      return logIn
-        ? Object.keys(errors).length === 0 || enterError === null
-        : Object.keys(errors).length === 0;
+      return Object.keys(errors).length === 0;
     },
     [validatorConfig, validateSchema, errors]
   );
@@ -54,7 +49,7 @@ const FormComponent = ({
   const handleSubmit = (e) => {
     e.preventDefault();
     const isValid = validate(data);
-    if (!isValid || enterError) return;
+    if (!isValid) return;
 
     if (logIn) {
       const redirect = historyLocation || '/users';
@@ -107,7 +102,7 @@ const FormComponent = ({
     if (childType === 'string') {
       if (child.type === 'button') {
         if (child.props.type === 'submit' || child.props.type === undefined) {
-          config = { ...child.props, disabled: !isValid || enterError };
+          config = { ...child.props, disabled: !isValid };
         }
       }
     }
@@ -128,8 +123,6 @@ FormComponent.propTypes = {
   validateSchema: PropTypes.object,
   signUp: PropTypes.func,
   logIn: PropTypes.func,
-  enterError: PropTypes.string,
-  setEnterError: PropTypes.func,
   historyLocation: PropTypes.string
 };
 

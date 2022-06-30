@@ -3,7 +3,8 @@ import { useHistory } from 'react-router-dom';
 import FormComponent, { TextField, CheckBoxField } from '../common/form';
 // import { useAuth } from '../../hooks/useAuth';
 import * as yup from 'yup';
-import { logIn } from '../../store/users';
+import { getAuthError, logIn } from '../../store/users';
+import { useSelector } from 'react-redux';
 
 const LoginForm = () => {
   const { location } = useHistory();
@@ -13,7 +14,8 @@ const LoginForm = () => {
     password: '',
     stayOn: false
   });
-  const [enterError, setEnterError] = useState(null);
+
+  const loginError = useSelector(getAuthError());
 
   // const { logIn } = useAuth();
 
@@ -64,8 +66,6 @@ const LoginForm = () => {
       defaultData={data}
       validateSchema={validateSchema}
       logIn={logIn}
-      enterError={enterError}
-      setEnterError={setEnterError}
       historyLocation={location.state?.from.pathname}
     >
       <TextField
@@ -78,9 +78,9 @@ const LoginForm = () => {
       <CheckBoxField name="stayOn">Оставаться в системе</CheckBoxField>
       <p
         className="text-danger"
-        style={{ display: enterError ? 'block' : 'none' }}
+        style={{ display: loginError ? 'block' : 'none' }}
       >
-        {enterError}
+        {loginError}
       </p>
       <button type="submit" className="btn btn-primary mb-2">
         Submit

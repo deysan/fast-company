@@ -1,5 +1,6 @@
 import { createAction, createSlice } from '@reduxjs/toolkit';
 import authService from '../services/auth.service';
+import { generateAuthError } from '../services/generateAuthError';
 import localStorageService from '../services/localStorage.service';
 import userService from '../services/user.service';
 import { getRandomInt } from '../utils/getRandomInt';
@@ -58,10 +59,13 @@ const usersSlice = createSlice({
       state.auth = null;
       state.dataLoaded = false;
     },
-    userUpdateSuccessed: (state, action) => {
+    userUpdateSuccess: (state, action) => {
       state.entities[
         state.entities.findIndex((user) => user._id === action.payload._id)
       ] = action.payload;
+    },
+    authRequested: (state) => {
+      state.error = null;
     }
   }
 });
@@ -76,10 +80,10 @@ const {
   authRequestFailed,
   userCreated,
   userLoggedOut,
-  userUpdateSuccessed
+  userUpdateSuccess,
+  authRequested
 } = actions;
 
-const authRequested = createAction('users/authRequested');
 const userCreateRequested = createAction('users/userCreateRequested');
 const createUserFailed = createAction('users/createUserFailed');
 const userUpdateRequested = createAction('users/userUpdateRequested');
@@ -97,7 +101,14 @@ export const logIn =
       localStorageService.setTokens(data);
       history.push(redirect);
     } catch (error) {
-      dispatch(authRequestFailed(error.message));
+      const { code, message } = error.response.data.error;
+
+      if (code === 400) {
+        const errorMessage = generateAuthError(message);
+        dispatch(authRequestFailed(errorMessage));
+      } else {
+        dispatch(authRequestFailed(error.message));
+      }
     }
   };
 
@@ -165,7 +176,7 @@ export const updateUser = (payload) => async (dispatch) => {
 
   try {
     const { content } = await userService.update(payload);
-    dispatch(userUpdateSuccessed(content));
+    dispatch(userUpdateSuccess(content));
     history.replace(`/users/${content._id}`);
   } catch (error) {
     dispatch(updateUserFailed(error.message));
@@ -193,5 +204,7 @@ export const getDataStatus = () => (state) => state.users.dataLoaded;
 export const getUsersLoadingStatus = () => (state) => state.users.isLoading;
 
 export const getCurrentUserId = () => (state) => state.users.auth.userId;
+
+export const getAuthError = () => (state) => state.users.error;
 
 export default usersReducer;
