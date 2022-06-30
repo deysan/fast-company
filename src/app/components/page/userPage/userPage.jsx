@@ -1,20 +1,23 @@
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import React from 'react';
-// import api from '../../../api';
 import UserCard from '../../ui/userCard';
 import MeetingsCard from '../../ui/meetingsCard';
 import QualitiesCard from '../../ui/qualitiesCard';
 import Comments from '../../ui/comments';
 import PropTypes from 'prop-types';
-import { useUser } from '../../../hooks/useUsers';
-import { CommentsProvider } from '../../../hooks/useComments';
+// import { useUser } from '../../../hooks/useUsers';
+// import { CommentsProvider } from '../../../hooks/useComments';
+import { useSelector } from 'react-redux';
+import { getUserById } from '../../../store/users';
 
 const UserPage = ({ userId }) => {
   const history = useHistory();
-  const { getUserById } = useUser();
+  // const { getUserById } = useUser();
   const { pathname } = useLocation();
 
-  const user = getUserById(userId);
+  const user = useSelector(getUserById(userId));
+
+  // const user = getUserById(userId);
 
   const handleClick = () => {
     history.push(`${pathname}/edit`);
@@ -34,9 +37,9 @@ const UserPage = ({ userId }) => {
           </div>
 
           <div className="col-md-8">
-            <CommentsProvider>
+            {/* <CommentsProvider> */}
               <Comments />
-            </CommentsProvider>
+            {/* </CommentsProvider> */}
           </div>
         </div>
       </div>

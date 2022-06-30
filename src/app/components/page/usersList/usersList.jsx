@@ -8,15 +8,20 @@ import Preloader from '../../ui/preloader';
 import UsersTable from '../../ui/usersTable';
 import Search from '../../common/search';
 import _ from 'lodash';
-import { useUser } from '../../../hooks/useUsers';
-import { useProfessions } from '../../../hooks/useProfession';
-import { useAuth } from '../../../hooks/useAuth';
+// import { useAuth } from '../../../hooks/useAuth';
+import { useSelector } from 'react-redux';
+import {
+  getProfessions,
+  getProfessionsLoadingStatus
+} from '../../../store/professions';
+import { getCurrentUserId, getUsersList } from '../../../store/users';
 
 const UsersList = () => {
   // const [users, setUsers] = useState();
-  const { users } = useUser();
-  const { currentUser } = useAuth();
-  const { professions, isLoading: professionsLoading } = useProfessions();
+  // const { currentUser } = useAuth();
+  const currentUserId = useSelector(getCurrentUserId());
+  const professions = useSelector(getProfessions());
+  const professionsLoading = useSelector(getProfessionsLoadingStatus());
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedFilter, setSelectedFilter] = useState();
   const [sortBy, setSortBy] = useState({
@@ -25,6 +30,8 @@ const UsersList = () => {
     icon: 'up'
   });
   const [searchValue, setSearchValue] = useState('');
+
+  const users = useSelector(getUsersList());
 
   const pageSize = 4;
 
@@ -86,7 +93,7 @@ const UsersList = () => {
           )
         : data;
 
-      return filteredUsers.filter((user) => user._id !== currentUser._id);
+      return filteredUsers.filter((user) => user._id !== currentUserId);
     }
 
     const filteredUsers = filterUsers(users);

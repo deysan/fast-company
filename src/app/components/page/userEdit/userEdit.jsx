@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import * as yup from 'yup';
 import {
@@ -9,15 +8,30 @@ import {
   MultiSelectField
 } from '../../common/form';
 import BackHistoryButton from '../../common/backButton';
-import { useAuth } from '../../../hooks/useAuth';
-import { useQualities } from '../../../hooks/useQualities';
-import { useProfessions } from '../../../hooks/useProfession';
+// import { useAuth } from '../../../hooks/useAuth';
+// import { useQualities } from '../../../hooks/useQualities';
+// import { useProfessions } from '../../../hooks/useProfession';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  getQualities,
+  getQualitiesLoadingStatus
+} from '../../../store/qualities';
+import {
+  getProfessions,
+  getProfessionsLoadingStatus
+} from '../../../store/professions';
+import { getCurrentUserData, updateUser } from '../../../store/users';
 
 const UserEdit = ({ userId }) => {
-  const history = useHistory();
-  const { currentUser, updateUserData } = useAuth();
-  const { qualities, isLoading: qualitiesLoading } = useQualities();
-  const { professions, isLoading: professionLoading } = useProfessions();
+  const dispatch = useDispatch();
+  // const { updateUserData } = useAuth();
+  const currentUser = useSelector(getCurrentUserData());
+  // const { qualities, isLoading: qualitiesLoading } = useQualities();
+  const qualities = useSelector(getQualities());
+  const qualitiesLoading = useSelector(getQualitiesLoadingStatus());
+  // const { professions, isLoading: professionsLoading } = useProfessions();
+  const professions = useSelector(getProfessions());
+  const professionsLoading = useSelector(getProfessionsLoadingStatus());
 
   const [data, setData] = useState();
   const [errors, setErrors] = useState({});
@@ -43,13 +57,13 @@ const UserEdit = ({ userId }) => {
     return Object.keys(errors).length === 0;
   };
 
-  const handleSave = async () => {
-    await updateUserData({
-      ...data,
-      qualities: data.qualities.map((q) => q.value)
-    });
-
-    history.replace(`/users/${userId}`);
+  const handleSave = () => {
+    dispatch(
+      updateUser({
+        ...data,
+        qualities: data.qualities.map((q) => q.value)
+      })
+    );
   };
 
   const handleChange = (target) => {
@@ -86,13 +100,13 @@ const UserEdit = ({ userId }) => {
   }
 
   useEffect(() => {
-    if (!professionLoading && !qualitiesLoading && currentUser && !data) {
+    if (!professionsLoading && !qualitiesLoading && currentUser && !data) {
       setData({
         ...currentUser,
         qualities: transformData(currentUser.qualities)
       });
     }
-  }, [professionLoading, qualitiesLoading, currentUser, data]);
+  }, [professionsLoading, qualitiesLoading, currentUser, data]);
 
   useEffect(() => {
     if (data && isLoading) {

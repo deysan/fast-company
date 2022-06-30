@@ -1,15 +1,21 @@
 import React, { useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
+import { getCurrentUserData } from '../../store/users';
+import Preloader from './preloader';
 
-const NavProfile = ({ currentUser }) => {
+const NavProfile = () => {
   const { pathname } = useLocation();
+
+  const currentUser = useSelector(getCurrentUserData());
 
   const [isOpen, setIsOpen] = useState();
 
   const toggleMenu = () => {
     setIsOpen((prevState) => !prevState);
   };
+
+  if (!currentUser) return <Preloader />;
 
   return (
     <div className="nav-item dropdown" onClick={toggleMenu}>
@@ -53,10 +59,6 @@ const NavProfile = ({ currentUser }) => {
       </ul>
     </div>
   );
-};
-
-NavProfile.propTypes = {
-  currentUser: PropTypes.object
 };
 
 export default NavProfile;

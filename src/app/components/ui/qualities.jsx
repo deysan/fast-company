@@ -1,18 +1,27 @@
-import React from 'react';
-import { useQualities } from '../../hooks/useQualities';
+import React, { useEffect } from 'react';
 import Preloader from './preloader';
 import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  getQualitiesByIds,
+  getQualitiesLoadingStatus,
+  loadQualitiesList
+} from '../../store/qualities';
 
 const Qualities = ({ qualities }) => {
-  const { isLoading, getQuality } = useQualities();
+  const dispatch = useDispatch();
+  const qualitiesList = useSelector(getQualitiesByIds(qualities));
+  const qualitiesLoading = useSelector(getQualitiesLoadingStatus());
 
-  if (isLoading) return <Preloader />;
+  useEffect(() => {
+    dispatch(loadQualitiesList());
+  }, []);
 
-  return qualities.map((quality) => {
-    const { color, name } = getQuality(quality);
+  if (qualitiesLoading) return <Preloader />;
 
+  return qualitiesList.map(({ _id: id, color, name }) => {
     return (
-      <span key={quality} className={`badge me-1 bg-${color}`}>
+      <span key={id} className={`badge me-1 bg-${color}`}>
         {name}
       </span>
     );
