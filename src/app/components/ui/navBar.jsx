@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
+// import { useAuth } from '../../hooks/useAuth';
+import { getIsLoggedIn } from '../../store/users';
 import NavProfile from './navProfile';
 
 const NavBar = () => {
   const { pathname } = useLocation();
-  const { currentUser } = useAuth();
+  // const { currentUser } = useAuth();
+
+  const isLoggedIn = useSelector(getIsLoggedIn());
 
   const defaultClasses = {
     main: 'nav-link',
@@ -35,7 +39,7 @@ const NavBar = () => {
               Main
             </Link>
           </li>
-          {currentUser && (
+          {isLoggedIn && (
             <li className="nav-item">
               <Link className={classes.users} to="/users">
                 Users
@@ -44,8 +48,8 @@ const NavBar = () => {
           )}
         </div>
 
-        {currentUser ? (
-          <NavProfile currentUser={currentUser} />
+        {isLoggedIn ? (
+          <NavProfile />
         ) : (
           <Link className={classes.login} to="/login">
             Login

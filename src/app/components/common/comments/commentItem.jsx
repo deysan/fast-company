@@ -2,8 +2,8 @@ import React from 'react';
 import Preloader from '../../ui/preloader';
 import { displayDate } from '../../../utils/displayDate';
 import PropTypes from 'prop-types';
-import { useAuth } from '../../../hooks/useAuth';
-import { getUserById } from '../../../store/users';
+// import { useAuth } from '../../../hooks/useAuth';
+import { getCurrentUserId, getUserById } from '../../../store/users';
 import { useSelector } from 'react-redux';
 
 const CommentItem = ({
@@ -13,7 +13,8 @@ const CommentItem = ({
   content,
   onDelete
 }) => {
-  const { currentUser } = useAuth();
+  // const { currentUser } = useAuth();
+  const currentUserId = useSelector(getCurrentUserId());
   const user = useSelector(getUserById(userId));
 
   if (user) {
@@ -36,7 +37,7 @@ const CommentItem = ({
                       {user.name}
                       <span className="small"> - {displayDate(created)}</span>
                     </p>
-                    {userId === currentUser._id && (
+                    {userId === currentUserId && (
                       <button
                         className="btn btn-sm text-primary d-flex align-items-center"
                         onClick={() => onDelete(commentId)}

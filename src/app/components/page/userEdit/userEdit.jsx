@@ -21,10 +21,12 @@ import {
   getProfessions,
   getProfessionsLoadingStatus
 } from '../../../store/professions';
+import { getCurrentUserData } from '../../../store/users';
 
 const UserEdit = ({ userId }) => {
   const history = useHistory();
-  const { currentUser, updateUserData } = useAuth();
+  const { updateUserData } = useAuth();
+  const currentUser = useSelector(getCurrentUserData());
   // const { qualities, isLoading: qualitiesLoading } = useQualities();
   const qualities = useSelector(getQualities());
   const qualitiesLoading = useSelector(getQualitiesLoadingStatus());
