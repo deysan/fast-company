@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import * as yup from 'yup';
 import {
@@ -9,10 +8,10 @@ import {
   MultiSelectField
 } from '../../common/form';
 import BackHistoryButton from '../../common/backButton';
-import { useAuth } from '../../../hooks/useAuth';
+// import { useAuth } from '../../../hooks/useAuth';
 // import { useQualities } from '../../../hooks/useQualities';
 // import { useProfessions } from '../../../hooks/useProfession';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   getQualities,
   getQualitiesLoadingStatus
@@ -21,11 +20,11 @@ import {
   getProfessions,
   getProfessionsLoadingStatus
 } from '../../../store/professions';
-import { getCurrentUserData } from '../../../store/users';
+import { getCurrentUserData, updateUser } from '../../../store/users';
 
 const UserEdit = ({ userId }) => {
-  const history = useHistory();
-  const { updateUserData } = useAuth();
+  const dispatch = useDispatch();
+  // const { updateUserData } = useAuth();
   const currentUser = useSelector(getCurrentUserData());
   // const { qualities, isLoading: qualitiesLoading } = useQualities();
   const qualities = useSelector(getQualities());
@@ -58,13 +57,13 @@ const UserEdit = ({ userId }) => {
     return Object.keys(errors).length === 0;
   };
 
-  const handleSave = async () => {
-    await updateUserData({
-      ...data,
-      qualities: data.qualities.map((q) => q.value)
-    });
-
-    history.replace(`/users/${userId}`);
+  const handleSave = () => {
+    dispatch(
+      updateUser({
+        ...data,
+        qualities: data.qualities.map((q) => q.value)
+      })
+    );
   };
 
   const handleChange = (target) => {
